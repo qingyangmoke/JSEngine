@@ -1,0 +1,1 @@
+ /Users/song/Library/Android/sdk/ndk/22.1.7171670/ndk-build NDK_PROJECT_PATH=./ NDK_APPLICATION_MK=./app/jni/Application.mk APP_BUILD_SCRIPT=./app/jni/Android.mk

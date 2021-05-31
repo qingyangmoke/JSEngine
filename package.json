@@ -1,0 +1,36 @@
+{
+  "name": "cplus",
+  "version": "1.0.0",
+  "description": "c++ study demo",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:bridge:ios:simulator": "SIMULATOR=IOS node scripts/build_ios.js",
+    "build:bridge:ios:arm": "node scripts/build_ios_arm.js",
+    "build:bridge:ios:arm64": "node scripts/build_ios_arm64.js",
+    "build:bridge:ios": "node scripts/build_ios.js",
+    "build:bridge:ios:release": "BUILD_MODE=Release node scripts/build_ios.js",
+    "build:bridge:android": "node scripts/build_android.js",    
+    "build:bridge:android:release": "BUILD_MODE=Release node scripts/build_android.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qingyangmoke/cplus-study.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/qingyangmoke/cplus-study/issues"
+  },
+  "homepage": "https://github.com/qingyangmoke/cplus-study#readme",
+  "dependencies": {
+    "chalk": "^4.1.1",
+    "commander": "^7.2.0",
+    "gulp": "^4.0.2",
+    "mkdirp": "^1.0.4"
+  }
+}
