@@ -2,13 +2,9 @@
  * Build script for iOS
  */
 
-const { paths } = require('./tasks_android');
+require('./tasks_android');
 const chalk = require('chalk');
-const path = require('path');
-const { program } = require('commander');
-const { series, parallel, task } = require('gulp');
-const { execSync } = require('child_process');
-const buildMode = process.env.KRAKEN_BUILD || 'Debug';
+const { series } = require('gulp');
 
 // Run tasks
 series(

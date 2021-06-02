@@ -14,7 +14,8 @@
     "build:bridge:ios:arm64": "node scripts/build_ios_arm64.js",
     "build:bridge:ios": "node scripts/build_ios.js",
     "build:bridge:ios:release": "BUILD_MODE=Release node scripts/build_ios.js",
-    "build:bridge:android": "node scripts/build_android.js",    
+    "build:bridge:android:jsc": "JS_ENGINE=jsc node scripts/build_android.js",
+    "build:bridge:android:quickjs": "JS_ENGINE=quickjs node scripts/build_android.js",
     "build:bridge:android:release": "BUILD_MODE=Release node scripts/build_android.js"
   },
   "repository": {

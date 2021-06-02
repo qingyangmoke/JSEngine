@@ -38,7 +38,6 @@ JNIEXPORT int JNICALL Java_com_jnibridge_JSEngine_createScope(JNIEnv *env, jobje
 
 JNIEXPORT int JNICALL Java_com_jnibridge_JSEngine_evaluateJavaScript(JNIEnv *env, jobject obj, int contextId, jstring sourceCode, jstring sourceURL, int startLine)
 {
-    _printToAndroid(env, contextId, "log", "Java_com_jnibridge_JSEngine_evaluateJavaScript");
     int result = 0;
 
     const char *_sourceCode = env->GetStringUTFChars(sourceCode, 0);

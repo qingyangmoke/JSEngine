@@ -5,7 +5,7 @@ function bootstrap() {
         console.log('callback', Array.from(arguments).join(','));
     }, 2000);
     
-    var result = window.__alita__.invokeModule('Navigation', 'to', { name:'xxxx' }, function() {
+    var result = window.__module__.invokeModule('Navigation', 'to', { name:'xxxx' }, function() {
         console.log('invokeModule', Array.from(arguments).join(','));
     });
     

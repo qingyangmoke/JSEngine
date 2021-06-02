@@ -11,6 +11,20 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 string(TOLOWER ${CMAKE_SYSTEM_NAME} CMAKE_SYSTEM_NAME)
 string(TOLOWER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  message("CMAKE_CXX_COMPILER_ID=Clang")
+  add_compile_options(-fcxx-exceptions)
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  message("CMAKE_CXX_COMPILER_ID=GNU")
+  # using GCC
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
+  message("CMAKE_CXX_COMPILER_ID=Intel")
+  # using Intel C++
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+  message("CMAKE_CXX_COMPILER_ID=MSVC")
+  # using Visual Studio C++
+endif()
+
 if(${USE_MACRO})
   add_definitions(-DUSE_MACRO=1)
 endif()
@@ -30,32 +44,28 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 list(APPEND APP_SOURCE
   ${CMAKE_CURRENT_SOURCE_DIR}/include/my_bridge.h
   my_bridge.cc
-  apps/hello.h
-  apps/hello.cc
-  apps/Animal.h
-  apps/Animal.cc
-  apps/Dog.h
-  apps/Dog.cc
 )
 
 if ($ENV{BRIDGE_JS_ENGINE} MATCHES "jsc")
   list(APPEND APP_SOURCE
-    jsc/jsengines/jsc/utils.h
-    jsc/jsengines/jsc/utils.cc
-    jsc/jsengines/jsc/JSConsole.h
-    jsc/jsengines/jsc/JSConsole.cc
-    jsc/jsengines/jsc/JSCoreContext.h
-    jsc/jsengines/jsc/JSCoreContext.cc
-    jsc/jsengines/jsc/AlitaGlobalObject.h
-    jsc/jsengines/jsc/AlitaGlobalObject.cc
+    core/jsengines/jsc/JSCoreContext.cc    
+    core/jsengines/jsc/JSCoreConsole.cc    
+    core/jsengines/jsc/JSCoreModule.cc
+    core/jsengines/jsc/JSCoreHelper.cc
+  )
+elseif ($ENV{BRIDGE_JS_ENGINE} MATCHES "quickjs")
+  list(APPEND APP_SOURCE
+    core/jsengines/quickjs/QuickJSContext.cc
+    core/jsengines/quickjs/QuickJSConsole.cc
+    core/jsengines/quickjs/QuickJSModule.cc
   )
 endif()
 
 list(APPEND APP_SOURCE
-  jsc/Engine.cc 
-  jsc/Scope.cc
-  jsc/Context.cc
-  jsc/NativeMethods.cc
+  core/Engine.cc 
+  core/Scope.cc
+  core/Context.cc
+  core/NativeMethods.cc
 )
 
 list(APPEND BRIDGE_INCLUDE
@@ -102,7 +112,7 @@ else()
 endif()
 
 if ($ENV{BRIDGE_JS_ENGINE} MATCHES "jsc")
-  add_compile_options(-DBRIDGE_JS_ENGINE=1)
+  add_definitions(-DBRIDGE_JS_ENGINE=1)
   if (${IS_ANDROID})
     message("IS_ANDROID=true")
     list(APPEND BRIDGE_INCLUDE
@@ -115,18 +125,7 @@ if ($ENV{BRIDGE_JS_ENGINE} MATCHES "jsc")
     list(APPEND BRIDGE_LINK_LIBS
             JavaScriptCore
             )
-    # message("APPLE=false")
-    # target_include_directories(my_bridge
-    #   PUBLIC
-    #   "/usr/include/webkitgtk-3.0")
-    # # target_link_libraries(my_bridge PRIVATE
-    # #   # Our needed libraries
-    # #   javascriptcoregtk-3.0
-    # #   BlocksRuntime)
-    # list(APPEND BRIDGE_LINK_LIBS javascriptcoregtk-3.0)
-    # list(APPEND BRIDGE_LINK_LIBS BlocksRuntime)
   else ()
-   
     message("APPLE=true")
     include_directories(/System/Library/Frameworks)
     find_library(JAVASCRIPTCORE_LIBRARY JavaScriptCore)
@@ -141,7 +140,16 @@ if ($ENV{BRIDGE_JS_ENGINE} MATCHES "jsc")
     #     list(APPEND BRIDGE_LINK_LIBS JavaScriptCore)
   endif()
 elseif ($ENV{BRIDGE_JS_ENGINE} MATCHES "v8")
+  add_definitions(-DBRIDGE_JS_ENGINE=2)
   message("v8 not support")
+elseif ($ENV{BRIDGE_JS_ENGINE} MATCHES "quickjs")
+  message("BRIDGE_JS_ENGINE=quickjs")
+  add_definitions(-DBRIDGE_JS_ENGINE=3)
+  list(APPEND BRIDGE_INCLUDE
+            ${CMAKE_CURRENT_SOURCE_DIR}/../third_party/quickjs
+            )
+  add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../third_party/quickjs/quickjs ${CMAKE_CURRENT_SOURCE_DIR}/../build/quickjs)
+  list(APPEND BRIDGE_LINK_LIBS quickjs)
 endif()
 
 if (DEFINED ENV{LIBRARY_OUTPUT_DIR})
@@ -149,27 +157,25 @@ if (DEFINED ENV{LIBRARY_OUTPUT_DIR})
           PROPERTIES
           LIBRARY_OUTPUT_DIRECTORY "$ENV{LIBRARY_OUTPUT_DIR}"
           )
-  # set_target_properties(kraken_static PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "$ENV{LIBRARY_OUTPUT_DIR}")
 elseif (IS_ANDROID)
   # android do nothing
 endif()
 
-if (${CMAKE_BUILD_TYPE} STREQUAL "release" OR ${CMAKE_BUILD_TYPE} STREQUAL "relwithdebinfo")
-  ## http://ptspts.blogspot.com/2013/12/how-to-make-smaller-c-and-c-binaries.html
-  ### remove dynamic_cast and exceptions
-  target_compile_options(my_bridge PRIVATE -fno-exceptions -fvisibility=hidden)
-else()
-  ### remove dynamic_cast and exceptions
-  target_compile_options(my_bridge PRIVATE -fno-exceptions)
-endif()
+# if (${CMAKE_BUILD_TYPE} STREQUAL "release" OR ${CMAKE_BUILD_TYPE} STREQUAL "relwithdebinfo")
+#   ## http://ptspts.blogspot.com/2013/12/how-to-make-smaller-c-and-c-binaries.html
+#   ### remove dynamic_cast and exceptions
+#   target_compile_options(my_bridge PRIVATE -fno-exceptions -fvisibility=hidden)
+# else()
+#   ### remove dynamic_cast and exceptions
+#   target_compile_options(my_bridge PRIVATE -fno-exceptions)
+# endif()
 
 target_include_directories(my_bridge PRIVATE
   ${BRIDGE_INCLUDE}
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   ${CMAKE_CURRENT_SOURCE_DIR}
   PUBLIC ./include)
-# We need hello.h and the hello library
-# add_subdirectory(apps)
+
 # link 自定义的library
 target_link_libraries(my_bridge PRIVATE ${BRIDGE_LINK_LIBS})
 

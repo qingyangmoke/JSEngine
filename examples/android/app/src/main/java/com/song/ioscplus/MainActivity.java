@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         EngineScope scope = EngineScope.createScope();
         String bundleCode = loadBundle("main.js");
         scope.evaluateJavaScript(bundleCode, "main.js", 0);
-//        String sourceCode = "window.__alita__.invokeModule('Navigation', 'to', { name:'x2' }, function() { console.log('javascript', 'invokeModule', Array.from(arguments).join(',')); });";
-//        scope.evaluateJavaScript(sourceCode, "", 0);
+//        String sourceCode = "window.nativeFlushQueueImmediate('nativeFlushQueueImmediate');window.nativeFlushQueueImmediate('nativeFlushQueueImmediate'); ";
+//        scope.evaluateJavaScript(sourceCode, "main.js", 0);
     }
 }

@@ -4,22 +4,26 @@ const { execSync } = require('child_process');
 const os = require('os');
 const fs = require('fs');
 
+const OS_PLATFORM = os.platform();
+
 const PROJECT_ROOT = path.join(__dirname, '..');
 const PATH_BUILD = path.join(PROJECT_ROOT, 'build');
 const PATH_SOURCE = path.join(PROJECT_ROOT, 'src');
 
 const BUILD_MODE = process.env.BUILD_MODE || 'Debug';
-const ENABLE_PROFILE = process.env.ENABLE_PROFILE === 'true';
 const IS_SIMULATOR = process.env.SIMULATOR == 'Android';
 const BUILD_TYPE = BUILD_MODE == 'Release' ? 'RelWithDebInfo' : 'Debug';
 
 const TARGET_NAME = 'my_bridge';
+const JS_ENGINE_JSC = 'jsc';
+const JS_ENGINE_V8 = 'v8';
+const JS_ENGINE_QJS = 'quickjs';
 
-const JS_ENGINE = process.env.JS_ENGINE || 'jsc';
-const OS_PLATFORM = os.platform();
+const JS_ENGINE = process.env.JS_ENGINE || JS_ENGINE_JSC;
+
 const CMAKE_GENERATOR_TEMPLATE = OS_PLATFORM == 'win32' ? 'Ninja' : 'Unix Makefiles';
 
-const ANDROID_ABI_LIST = ['arm64-v8a', 'armeabi-v7a', 'x86_64']; // ['arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64']
+const ANDROID_ABI_LIST = ['arm64-v8a', 'armeabi-v7a', 'x86_64'];
 
 let ANDROID_HOME_PATH;
 
@@ -48,28 +52,36 @@ const CMAKE_TOOLCHAIN_FILE = path.join(
 const ANDROID_NDK = path.join(ANDROID_HOME_PATH, '/ndk/', NDK_VERSION);
 
 task('clean-android', (done) => {
-    execSync(`rm -rf ${PATH_BUILD}/android`, { stdio: 'inherit' });
-    ANDROID_ABI_LIST.forEach((e) => {
-        execSync(`rm -rf ${PATH_BUILD}/cmake-build-android-${e}`, { stdio: 'inherit' });
-    });
+    console.log('clean-android');
+    if (!fs.existsSync(`${PATH_BUILD}`)) {
+        console.log('not existsSync');
+        fs.mkdirSync(`${PATH_BUILD}`);
+    } else {
+        console.log('existsSync');
+        execSync(`rm -rf ${PATH_BUILD}/android`, { stdio: 'inherit' });
+        ANDROID_ABI_LIST.forEach((e) => {
+            execSync(`rm -rf ${PATH_BUILD}/cmake-build-android-${e}`, { stdio: 'inherit' });
+        });
+    }
     done();
 });
 
 task('build-android', (done) => {
+    console.log('build-android');
     ANDROID_ABI_LIST.forEach((arch) => {
+        console.log('build-android arch=', arch);
         const LIBRARY_OUTPUT_DIR = path.join(PATH_BUILD, `android/jni/libs/${arch}`);
         const currentCmakeDir = path.join(PATH_BUILD, `cmake-build-android-${arch}`);
         execSync(
-            `cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
-    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
-    -DANDROID_NDK=${ANDROID_NDK} \
-    -DIS_ANDROID=TRUE \
-    -DANDROID_ABI="${arch}" \
-    ${ENABLE_PROFILE ? '-DENABLE_PROFILE=TRUE \\' : '\\'}
-    -DANDROID_PLATFORM="android-16" \
-    -DANDROID_STL=c++_shared \
-    -G "${CMAKE_GENERATOR_TEMPLATE}" \
-    -B ${currentCmakeDir} -S ${PATH_SOURCE}`,
+            `cmake  -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+                    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
+                    -DANDROID_NDK=${ANDROID_NDK} \
+                    -DIS_ANDROID=TRUE \
+                    -DANDROID_ABI="${arch}" \
+                    -DANDROID_PLATFORM="android-16" \
+                    -DANDROID_STL=c++_shared \
+                    -G "${CMAKE_GENERATOR_TEMPLATE}" \
+                    -B ${currentCmakeDir} -S ${PATH_SOURCE}`,
             {
                 cwd: PATH_BUILD,
                 stdio: 'inherit',
@@ -86,19 +98,14 @@ task('build-android', (done) => {
             stdio: 'inherit',
         });
 
-        // TODO: 支持多引擎
-        execSync(
-            `cp -r ${PROJECT_ROOT}/third_party/JavaScriptCore/lib/android/${arch}/ ${LIBRARY_OUTPUT_DIR}`,
-            { stdio: 'inherit' },
-        );
-    });
-    done();
-});
-
-task('clean-android', (done) => {
-    execSync(`rm -rf ${PATH_BUILD}/android`, { stdio: 'inherit' });
-    ANDROID_ABI_LIST.forEach((e) => {
-        execSync(`rm -rf ${PATH_BUILD}/cmake-build-android-${e}`, { stdio: 'inherit' });
+        switch (JS_ENGINE) {
+            case JS_ENGINE_JSC:
+                execSync(
+                    `cp -r ${PROJECT_ROOT}/third_party/JavaScriptCore/lib/android/${arch}/ ${LIBRARY_OUTPUT_DIR}`,
+                    { stdio: 'inherit' },
+                );
+                break;
+        }
     });
     done();
 });
@@ -109,8 +116,11 @@ task('clean-android-jni', (done) => {
 });
 
 task('build-android-jni', (done) => {
+    console.log('build-android-jni');
     execSync(`cp -r ${PATH_SOURCE}/jni/ ${PATH_BUILD}/android/jni`, { stdio: 'inherit' });
-    execSync(`cp -r ${PATH_SOURCE}/include/ ${PATH_BUILD}/android/jni/include`, { stdio: 'inherit' });
+    execSync(`cp -r ${PATH_SOURCE}/include/ ${PATH_BUILD}/android/jni/include`, {
+        stdio: 'inherit',
+    });
 
     execSync(
         `${ANDROID_NDK}/ndk-build NDK_PROJECT_PATH=./ NDK_APPLICATION_MK=./jni/Application.mk APP_BUILD_SCRIPT=./jni/Android.mk`,
@@ -120,12 +130,16 @@ task('build-android-jni', (done) => {
         },
     );
 
-    ANDROID_ABI_LIST.forEach((arch) => {
-        execSync(
-            `cp -r ${PROJECT_ROOT}/third_party/JavaScriptCore/lib/android/${arch}/ ${PATH_BUILD}/android/libs/${arch}`,
-            { stdio: 'inherit' },
-        );
-    });
+    switch (JS_ENGINE) {
+        case JS_ENGINE_JSC:
+            ANDROID_ABI_LIST.forEach((arch) => {
+                execSync(
+                    `cp -r ${PROJECT_ROOT}/third_party/JavaScriptCore/lib/android/${arch}/ ${PATH_BUILD}/android/libs/${arch}`,
+                    { stdio: 'inherit' },
+                );
+            });
+            break;
+    }
     done();
 });
 

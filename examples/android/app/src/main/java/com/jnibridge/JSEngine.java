@@ -6,8 +6,8 @@ public class JSEngine {
     public static Logger _logger = Logger.getLogger("JSEngine");
     static {
         try {
-            System.loadLibrary("c++_shared");
-            System.loadLibrary("jsc");
+//            System.loadLibrary("c++_shared");
+//            System.loadLibrary("jsc");
             System.loadLibrary("my_bridge");
             System.loadLibrary("MyBridgeJNI");
         }catch (Exception e) {
@@ -35,7 +35,7 @@ public class JSEngine {
     public static void log(int contextId, String tagName, String message) {
         switch (tagName.toLowerCase()) {
             case "warn":
-                _logger.warning(message);
+                _logger.warning("contextId="+ contextId +  " ," + message);
                 break;
             default:
                 _logger.info(message);
