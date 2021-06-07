@@ -1,6 +1,6 @@
 #include <jni.h>   // JNI header provided by JDK
 #include <stdio.h> // C Standard IO Header
-#include "include/my_bridge.h"
+#include "include/jsengine_bridge.h"
 #include "MyBridge.h"
 
 int _printToAndroid(JNIEnv *env, int contextId, const char *tag, const char *message)

@@ -11,9 +11,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 string(TOLOWER ${CMAKE_SYSTEM_NAME} CMAKE_SYSTEM_NAME)
 string(TOLOWER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
 
+
+message("CMAKE_CXX_COMPILER_ID=${CMAKE_CXX_COMPILER_ID}")
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
   message("CMAKE_CXX_COMPILER_ID=Clang")
-  add_compile_options(-fcxx-exceptions)
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   message("CMAKE_CXX_COMPILER_ID=GNU")
   # using GCC
@@ -35,15 +36,15 @@ option(USE_MACRO_SWITCH "USE_MACRO_SWITCH" ON)
 configure_file(config.h.in config.h @ONLY)
 
 list(APPEND PUBLIC_HEADERS
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/my_bridge.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/jsengine_bridge.h
 )
 
 #  specify the output directory as an include directory
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 list(APPEND APP_SOURCE
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/my_bridge.h
-  my_bridge.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/jsengine_bridge.h
+  jsengine_bridge.cc
 )
 
 if ($ENV{BRIDGE_JS_ENGINE} MATCHES "jsc")
@@ -58,6 +59,10 @@ elseif ($ENV{BRIDGE_JS_ENGINE} MATCHES "quickjs")
     core/jsengines/quickjs/QuickJSContext.cc
     core/jsengines/quickjs/QuickJSConsole.cc
     core/jsengines/quickjs/QuickJSModule.cc
+  )
+elseif ($ENV{BRIDGE_JS_ENGINE} MATCHES "v8")
+  list(APPEND APP_SOURCE
+    core/jsengines/v8/V8Context.cc
   )
 endif()
 
@@ -74,15 +79,15 @@ list(APPEND BRIDGE_INCLUDE
 )
 
 ## 自定义一个library
-add_library(my_bridge_static STATIC ${APP_SOURCE})
+add_library(jsengine_bridge_static STATIC ${APP_SOURCE})
 
 # IOS配置 
 if (${CMAKE_SYSTEM_NAME} MATCHES "ios")
-  add_library(my_bridge SHARED ${APP_SOURCE})
+  add_library(jsengine_bridge SHARED ${APP_SOURCE})
   set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "NO")
   set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "")
-  set_target_properties(my_bridge PROPERTIES
-    OUTPUT_NAME my_bridge
+  set_target_properties(jsengine_bridge PROPERTIES
+    OUTPUT_NAME jsengine_bridge
     FRAMEWORK TRUE
     FRAMEWORK_VERSION C
     MACOSX_FRAMEWORK_IDENTIFIER com.cmake.dynamicFramework
@@ -95,8 +100,8 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "ios")
     # XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Developer"
   )
 else()
-  add_library(my_bridge SHARED ${APP_SOURCE})
-  # add_executable(my_bridge 
+  add_library(jsengine_bridge SHARED ${APP_SOURCE})
+  # add_executable(jsengine_bridge 
   #   main.cc
   #   class_test.h
   #   class_test.cc
@@ -107,8 +112,8 @@ else()
   #   func_test.h
   #   func_test.cc
   # )
-  # list(APPEND BRIDGE_LINK_LIBS my_bridge_static)
-  # target_link_libraries(my_bridge PRIVATE my_bridge_static)
+  # list(APPEND BRIDGE_LINK_LIBS jsengine_bridge_static)
+  # target_link_libraries(jsengine_bridge PRIVATE jsengine_bridge_static)
 endif()
 
 if ($ENV{BRIDGE_JS_ENGINE} MATCHES "jsc")
@@ -153,7 +158,7 @@ elseif ($ENV{BRIDGE_JS_ENGINE} MATCHES "quickjs")
 endif()
 
 if (DEFINED ENV{LIBRARY_OUTPUT_DIR})
-  set_target_properties(my_bridge
+  set_target_properties(jsengine_bridge
           PROPERTIES
           LIBRARY_OUTPUT_DIRECTORY "$ENV{LIBRARY_OUTPUT_DIR}"
           )
@@ -164,20 +169,20 @@ endif()
 # if (${CMAKE_BUILD_TYPE} STREQUAL "release" OR ${CMAKE_BUILD_TYPE} STREQUAL "relwithdebinfo")
 #   ## http://ptspts.blogspot.com/2013/12/how-to-make-smaller-c-and-c-binaries.html
 #   ### remove dynamic_cast and exceptions
-#   target_compile_options(my_bridge PRIVATE -fno-exceptions -fvisibility=hidden)
+#   target_compile_options(jsengine_bridge PRIVATE -fno-exceptions -fvisibility=hidden)
 # else()
 #   ### remove dynamic_cast and exceptions
-#   target_compile_options(my_bridge PRIVATE -fno-exceptions)
+#   target_compile_options(jsengine_bridge PRIVATE -fno-exceptions)
 # endif()
 
-target_include_directories(my_bridge PRIVATE
+target_include_directories(jsengine_bridge PRIVATE
   ${BRIDGE_INCLUDE}
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   ${CMAKE_CURRENT_SOURCE_DIR}
   PUBLIC ./include)
 
 # link 自定义的library
-target_link_libraries(my_bridge PRIVATE ${BRIDGE_LINK_LIBS})
+target_link_libraries(jsengine_bridge PRIVATE ${BRIDGE_LINK_LIBS})
 
 # Tell C++ compiler to use C++20 features. We don't actually use any of them.
-target_compile_features(my_bridge PUBLIC cxx_std_20)
+target_compile_features(jsengine_bridge PUBLIC cxx_std_20)

@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "include/my_bridge.h"
+#include "include/jsengine_bridge.h"
 
 namespace CPlusDemo::v8
 {

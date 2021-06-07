@@ -4,7 +4,7 @@
 #include "JSCoreConsole.h"
 #include "JSCoreHelper.h"
 #include "JSCoreContext.h"
-#include "include/my_bridge.h"
+#include "include/jsengine_bridge.h"
 using namespace CPlusDemo;
 using namespace jsc;
 

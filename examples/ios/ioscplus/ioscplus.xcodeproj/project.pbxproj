@@ -12,8 +12,8 @@
 		E4043866265509F300AFFAAB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4043864265509F300AFFAAB /* Main.storyboard */; };
 		E4043868265509F500AFFAAB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4043867265509F500AFFAAB /* Assets.xcassets */; };
 		E404386B265509F500AFFAAB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4043869265509F500AFFAAB /* LaunchScreen.storyboard */; };
-		E40438B126550D2400AFFAAB /* my_bridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E40438AF26550D1500AFFAAB /* my_bridge.framework */; };
-		E40438B226550D2400AFFAAB /* my_bridge.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E40438AF26550D1500AFFAAB /* my_bridge.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E40438B126550D2400AFFAAB /* jsengine_bridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E40438AF26550D1500AFFAAB /* jsengine_bridge.framework */; };
+		E40438B226550D2400AFFAAB /* jsengine_bridge.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E40438AF26550D1500AFFAAB /* jsengine_bridge.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E40438BE2655275A00AFFAAB /* bridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = E40438BD2655275A00AFFAAB /* bridge.mm */; };
 		E40438C1265C983100AFFAAB /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = E40438C0265C983000AFFAAB /* main.js */; };
 		E40438E4265C9FD200AFFAAB /* EngineScope.mm in Sources */ = {isa = PBXBuildFile; fileRef = E40438E3265C9FD200AFFAAB /* EngineScope.mm */; };
@@ -26,7 +26,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E40438B226550D2400AFFAAB /* my_bridge.framework in Embed Frameworks */,
+				E40438B226550D2400AFFAAB /* jsengine_bridge.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -41,7 +41,7 @@
 		E4043867265509F500AFFAAB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E404386A265509F500AFFAAB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E404386C265509F500AFFAAB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E40438AF26550D1500AFFAAB /* my_bridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = my_bridge.framework; sourceTree = "<group>"; };
+		E40438AF26550D1500AFFAAB /* jsengine_bridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = jsengine_bridge.framework; sourceTree = "<group>"; };
 		E40438B526550E8A00AFFAAB /* ioscplus-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ioscplus-Bridging-Header.h"; sourceTree = "<group>"; };
 		E40438BD2655275A00AFFAAB /* bridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = bridge.mm; sourceTree = "<group>"; };
 		E40438BF2655276700AFFAAB /* bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bridge.h; sourceTree = "<group>"; };
@@ -55,7 +55,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E40438B126550D2400AFFAAB /* my_bridge.framework in Frameworks */,
+				E40438B126550D2400AFFAAB /* jsengine_bridge.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,7 +65,7 @@
 		E4043852265509F200AFFAAB = {
 			isa = PBXGroup;
 			children = (
-				E40438AF26550D1500AFFAAB /* my_bridge.framework */,
+				E40438AF26550D1500AFFAAB /* jsengine_bridge.framework */,
 				E404385D265509F200AFFAAB /* ioscplus */,
 				E404385C265509F200AFFAAB /* Products */,
 			);

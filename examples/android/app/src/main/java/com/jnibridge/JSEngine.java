@@ -8,7 +8,7 @@ public class JSEngine {
         try {
 //            System.loadLibrary("c++_shared");
 //            System.loadLibrary("jsc");
-            System.loadLibrary("my_bridge");
+            System.loadLibrary("jsengine_bridge");
             System.loadLibrary("MyBridgeJNI");
         }catch (Exception e) {
             System.err.println("UnsatisfiedLinkError:" + e.toString());

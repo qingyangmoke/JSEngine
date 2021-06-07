@@ -13,7 +13,7 @@ const ENABLE_PROFILE = process.env.ENABLE_PROFILE === 'true';
 const IS_SIMULATOR = process.env.SIMULATOR == 'IOS';
 const BUILD_TYPE = BUILD_MODE == 'Release' ? 'RelWithDebInfo' : 'Debug';
 
-const TARGET_NAME = 'my_bridge';
+const TARGET_NAME = 'jsengine_bridge';
 
 const JS_ENGINE = process.env.JS_ENGINE || 'jsc';
 

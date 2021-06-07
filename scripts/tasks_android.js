@@ -14,7 +14,7 @@ const BUILD_MODE = process.env.BUILD_MODE || 'Debug';
 const IS_SIMULATOR = process.env.SIMULATOR == 'Android';
 const BUILD_TYPE = BUILD_MODE == 'Release' ? 'RelWithDebInfo' : 'Debug';
 
-const TARGET_NAME = 'my_bridge';
+const TARGET_NAME = 'jsengine_bridge';
 const JS_ENGINE_JSC = 'jsc';
 const JS_ENGINE_V8 = 'v8';
 const JS_ENGINE_QJS = 'quickjs';

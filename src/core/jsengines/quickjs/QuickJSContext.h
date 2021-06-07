@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "include/my_bridge.h"
+#include "include/jsengine_bridge.h"
 
 #include <quickjs/quickjs.h>
 
@@ -15,8 +15,9 @@ namespace CPlusDemo::quickjs
     QuickJSEngineContext(int contextId);
     ~QuickJSEngineContext() override;
     bool evaluateJavaScript(const char *sourceCode, const char *sourceURL, int startLine) override;
-  private:
+  protected:
     static JSRuntime *_runtime;
+  private:
     JSContext *_context;
   };
 }

@@ -10,7 +10,7 @@
 #import "EngineScope.h"
 
 // 一定对mm文件中定义
-#import <my_bridge/my_bridge.h>
+#import <jsengine_bridge/jsengine_bridge.h>
 
 // 使用MyBridge 暴露C++的对外的接口
 @implementation EngineScope

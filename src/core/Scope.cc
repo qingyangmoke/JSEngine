@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 
-#include "include/my_bridge.h"
+#include "include/jsengine_bridge.h"
 
 using namespace CPlusDemo;
 

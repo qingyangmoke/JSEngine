@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "include/my_bridge.h"
+#include "include/jsengine_bridge.h"
 #include "JSCoreContext.h"
 #include "JSCoreHelper.h"
 #include "JSCoreConsole.h"

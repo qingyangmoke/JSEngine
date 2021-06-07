@@ -1,14 +1,14 @@
 {
-  "name": "cplus",
-  "version": "1.0.0",
-  "description": "c++ study demo",
+  "name": "jsengine",
+  "version": "0.0.1-Beta0.1",
+  "description": "JSEngine，构建一个js运行时的抽象层，让JS具备调用IOS、安卓、Flutter、C++能力，底层可以无缝对接支持v8,javascriptCore,quickjs等，抹平底部框架细节，无缝切换，对调用方透明。",
   "main": "index.js",
   "directories": {
     "doc": "docs",
     "example": "examples"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm run build:bridge:ios:simulator",
     "build:bridge:ios:simulator": "SIMULATOR=IOS node scripts/build_ios.js",
     "build:bridge:ios:arm": "node scripts/build_ios_arm.js",
     "build:bridge:ios:arm64": "node scripts/build_ios_arm64.js",
@@ -16,18 +16,21 @@
     "build:bridge:ios:release": "BUILD_MODE=Release node scripts/build_ios.js",
     "build:bridge:android:jsc": "JS_ENGINE=jsc node scripts/build_android.js",
     "build:bridge:android:quickjs": "JS_ENGINE=quickjs node scripts/build_android.js",
-    "build:bridge:android:release": "BUILD_MODE=Release node scripts/build_android.js"
+    "build:bridge:android:v8": "JS_ENGINE=v8 node scripts/build_android.js",
+    "build:bridge:android:release:jsc": "BUILD_MODE=Release JS_ENGINE=jsc node scripts/build_android.js",
+    "build:bridge:android:release:quickjs": "BUILD_MODE=Release JS_ENGINE=quickjs node scripts/build_android.js",
+    "build:bridge:android:release:v8": "BUILD_MODE=Release JS_ENGINE=v8 node scripts/build_android.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/qingyangmoke/cplus-study.git"
+    "url": "git+https://github.com/qingyangmoke/JSEngine.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/qingyangmoke/cplus-study/issues"
+    "url": "https://github.com/qingyangmoke/JSEngine/issues"
   },
-  "homepage": "https://github.com/qingyangmoke/cplus-study#readme",
+  "homepage": "https://github.com/qingyangmoke/JSEngine#readme",
   "dependencies": {
     "chalk": "^4.1.1",
     "commander": "^7.2.0",

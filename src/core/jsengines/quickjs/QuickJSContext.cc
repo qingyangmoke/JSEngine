@@ -4,6 +4,8 @@
 using namespace CPlusDemo;
 using namespace CPlusDemo::quickjs;
 
+JSRuntime *QuickJSEngineContext::_runtime = NULL;
+
 QuickJSEngineContext::QuickJSEngineContext(int contextId) : EngineContext(contextId)
 {
   EngineNativeMethods::instance()->log(_contextId, "info", "QuickJSEngineContext init");
@@ -39,8 +41,8 @@ bool QuickJSEngineContext::evaluateJavaScript(const char *sourceCode, const char
 QuickJSEngineContext::~QuickJSEngineContext()
 {
   JS_FreeContext(_context);
-  JS_FreeRuntime(_runtime);
+  // JS_FreeRuntime(_runtime);
   _context = NULL;
-  _runtime = NULL;
-  std::cout << "QuickJSEngineContext destroyed" << std::endl;
+  // QuickJSEngineContext::_runtime = NULL;
+  EngineNativeMethods::instance()->log(_contextId, "info", "QuickJSEngineContext destroyed");
 }
