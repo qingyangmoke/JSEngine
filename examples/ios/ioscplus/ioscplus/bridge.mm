@@ -27,6 +27,13 @@
             return "success";
         };
     }
+    if(!CPlusDemo::EngineNativeMethods::instance()->logPointer) {
+        CPlusDemo::EngineNativeMethods::instance()->logPointer = ^const char *(int contextId, const char *tagName, const char *message) {
+            // 需要在这里实现module对应的处理类
+            printf("【Console】contextId=%d, tagName=%s, message=%s \n",  contextId, tagName, message);
+            return "success";
+        };
+    }
 }
 
 + (EngineScope *)createScope:(int) contextId {

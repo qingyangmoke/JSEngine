@@ -1,18 +1,24 @@
-# cplus-study
-c++ study demo
+# JSEngine
+> JSEngine，构建一个js运行时的抽象层，让JS具备调用IOS、安卓、Flutter、C++能力，底层可以无缝对接支持v8,javascriptCore,quickjs等，抹平底部框架细节，无缝切换，对调用方透明。
+
+**仅供初学者学习使用，初衷是让前端能够轻松的进入跨端领域的入门学习**
 
 ## 环境要求
 - cmake >= 3.11-3.18
 - c++17
 
 ## 生成make文件
-```js
-  // 模拟器可用库 Debug使用
+```shell
+  # dom polyfil
+  npm run build:bridge:polyfill
+  # 模拟器可用库 Debug使用
   npm run build:bridge:ios:simulator
-  // 无模拟器链接库 真机使用
+  # 无模拟器链接库 真机使用
   npm run build:bridge:ios
-  // release
+  # release
   npm run build:bridge:ios:release
+  # 编译v8版本
+  npm run build:bridge:android:v8
 ```
 ## 配置Xcode
 > 禁用Bitcode

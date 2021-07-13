@@ -36,10 +36,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        System.err.println("result=xxx");
+        System.err.println("launch");
         int r1 = JSEngine.initEngine();
         System.err.println("initEngine.result="+r1);
         EngineScope scope = EngineScope.createScope();
+        System.err.println("initEngine.scope.getContextId=" + scope.getContextId());
         String bundleCode = loadBundle("main.js");
         scope.evaluateJavaScript(bundleCode, "main.js", 0);
 //        String sourceCode = "window.nativeFlushQueueImmediate('nativeFlushQueueImmediate');window.nativeFlushQueueImmediate('nativeFlushQueueImmediate'); ";

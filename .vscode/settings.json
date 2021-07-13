@@ -82,7 +82,8 @@
     "unordered_set": "cpp",
     "malloc.h": "c",
     "stdlib.h": "c",
-    "variant": "cpp"
+    "variant": "cpp",
+    "clocale": "cpp"
   },
   "cmake.sourceDirectory": "${workspaceFolder}/src"
 }

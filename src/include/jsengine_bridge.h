@@ -75,15 +75,26 @@ namespace CPlusDemo
 
   class BRIDGE_EXPORT EngineScope
   {
-  public:
-    EngineContext *_context;
+  public:    
     EngineScope(int contextId);
     int getContextId();
     bool evaluateJavaScript(const char *sourceCode, const char *sourceURL, int startLine);
     ~EngineScope();
 
   private:
+    EngineContext *_context;
     int _contextId;
+  };
+
+
+  class BRIDGE_EXPORT EnginePlugin
+  {
+  public:
+    std::string name;
+    EnginePlugin(const std::string &name);
+    virtual ~EnginePlugin();
+    virtual void onScopeCreate(EngineScope *scope);
+    virtual void onScopeDestroy(EngineScope *scope);
   };
 
   class BRIDGE_EXPORT Engine
@@ -94,6 +105,7 @@ namespace CPlusDemo
     EngineScope *createScope(int contextId);
     EngineScope *getScope(int contextId);
     void removeScope(int contextId);
+    void registerPlugin(EnginePlugin *plugin);
 
   protected:
     static Engine *singletonInstance;
@@ -102,6 +114,7 @@ namespace CPlusDemo
 
   private:
     std::unordered_map<int, EngineScope *> _scopeMap = {};
+    std::unordered_map<std::string, EnginePlugin *> _plugins = {};
   };
 
   class BRIDGE_EXPORT Student

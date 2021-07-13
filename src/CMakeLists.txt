@@ -2,7 +2,7 @@
 # so let's require it now.
 cmake_minimum_required(VERSION 3.11-3.18)
 
-project(MyBridge)
+project(JSEngineBridge)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_C_FLAGS -flto)
@@ -63,6 +63,11 @@ elseif ($ENV{BRIDGE_JS_ENGINE} MATCHES "quickjs")
 elseif ($ENV{BRIDGE_JS_ENGINE} MATCHES "v8")
   list(APPEND APP_SOURCE
     core/jsengines/v8/V8Context.cc
+    core/jsengines/v8/V8Runtime.h
+    core/jsengines/v8/V8Runtime.cc
+    core/jsengines/v8/V8EngineAllocator.cc
+    core/jsengines/v8/V8Console.cc
+    core/jsengines/v8/V8EngineModule.cc
   )
 endif()
 
@@ -71,10 +76,13 @@ list(APPEND APP_SOURCE
   core/Scope.cc
   core/Context.cc
   core/NativeMethods.cc
+  core/plugins/EnginePlugin.cc
+  core/plugins/dom/DomPolyfill.cc
+  core/plugins/dom/DomEnginePlugin.cc
 )
 
 list(APPEND BRIDGE_INCLUDE
-    ./include
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
@@ -101,19 +109,6 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "ios")
   )
 else()
   add_library(jsengine_bridge SHARED ${APP_SOURCE})
-  # add_executable(jsengine_bridge 
-  #   main.cc
-  #   class_test.h
-  #   class_test.cc
-  #   string_test.h
-  #   string_test.cc
-  #   values_test.h
-  #   values_test.cc
-  #   func_test.h
-  #   func_test.cc
-  # )
-  # list(APPEND BRIDGE_LINK_LIBS jsengine_bridge_static)
-  # target_link_libraries(jsengine_bridge PRIVATE jsengine_bridge_static)
 endif()
 
 if ($ENV{BRIDGE_JS_ENGINE} MATCHES "jsc")
@@ -146,7 +141,41 @@ if ($ENV{BRIDGE_JS_ENGINE} MATCHES "jsc")
   endif()
 elseif ($ENV{BRIDGE_JS_ENGINE} MATCHES "v8")
   add_definitions(-DBRIDGE_JS_ENGINE=2)
-  message("v8 not support")
+  if (${IS_ANDROID})
+    message("IS_ANDROID=true")
+
+    if("${ANDROID_ABI}" MATCHES "arm64-v8a$" OR "${ANDROID_ABI}" MATCHES "x86_64$")
+      # Enable pointer compression on 64 bit platforms
+      set(COMMON_CMAKE_ARGUMENTS "${COMMON_CMAKE_ARGUMENTS} -DV8_COMPRESS_POINTERS")
+    endif()
+
+    list(APPEND BRIDGE_INCLUDE
+              ${CMAKE_CURRENT_SOURCE_DIR}/../third_party/v8/include
+              )
+    target_link_libraries(jsengine_bridge "${CMAKE_CURRENT_SOURCE_DIR}/../third_party/v8/libs/${ANDROID_ABI}/libv8_base.a")
+    target_link_libraries(jsengine_bridge "${CMAKE_CURRENT_SOURCE_DIR}/../third_party/v8/libs/${ANDROID_ABI}/libv8_snapshot.a")
+    target_link_libraries(jsengine_bridge "${CMAKE_CURRENT_SOURCE_DIR}/../third_party/v8/libs/${ANDROID_ABI}/libv8_init.a")
+    target_link_libraries(jsengine_bridge "${CMAKE_CURRENT_SOURCE_DIR}/../third_party/v8/libs/${ANDROID_ABI}/libv8_initializers.a")
+    target_link_libraries(jsengine_bridge "${CMAKE_CURRENT_SOURCE_DIR}/../third_party/v8/libs/${ANDROID_ABI}/libv8_libplatform.a")
+    target_link_libraries(jsengine_bridge "${CMAKE_CURRENT_SOURCE_DIR}/../third_party/v8/libs/${ANDROID_ABI}/libv8_libsampler.a")
+    target_link_libraries(jsengine_bridge "${CMAKE_CURRENT_SOURCE_DIR}/../third_party/v8/libs/${ANDROID_ABI}/libv8_libbase.a")
+
+    # if("${ANDROID_ABI}" MATCHES "armeabi-v7a$" OR "${ANDROID_ABI}" MATCHES "x86$")
+    #   # On API Level 19 and lower we need to link with android_support
+    #   # because it contains some implementation of functions such as "strtoll" and "strtoul"
+    #   message("# Linking with libandroid_support.a")
+    #   target_link_libraries(jsengine_bridge "${CMAKE_CURRENT_SOURCE_DIR}/../third_party/v8/libs/${ANDROID_ABI}/libandroid_support.a")
+    # endif()
+    find_library(system-log log)
+    find_library(system-z z)
+    find_library(system-android android)
+
+    # Command info: https://cmake.org/cmake/help/v3.4/command/target_link_libraries.html
+    # Specifies libraries CMake should link to your target library.
+    target_link_libraries(jsengine_bridge ${system-log} ${system-z} ${system-android})
+  else ()    
+    message("v8 not support IOS ")
+  endif()
 elseif ($ENV{BRIDGE_JS_ENGINE} MATCHES "quickjs")
   message("BRIDGE_JS_ENGINE=quickjs")
   add_definitions(-DBRIDGE_JS_ENGINE=3)

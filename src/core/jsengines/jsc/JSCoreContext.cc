@@ -91,6 +91,11 @@ JSCoreEngineContext::JSCoreEngineContext(int contextId) : EngineContext(contextI
   JSStringRelease(windowName);
   JSStringRelease(globalThis);
 
+
+  JSStringRef contextIdJSString = JSStringCreateWithUTF8CString("contextId");
+  JSObjectSetProperty(_jscContext, global, contextIdJSString, JSValueMakeNumber(_jscContext, contextId), kJSPropertyAttributeNone, nullptr);
+  JSStringRelease(contextIdJSString);
+  
   JSCoreConsole::initConsole(_jscContext, global);
   JSCoreModule::initModule(_jscContext, global);
 }

@@ -23,7 +23,8 @@ const JS_ENGINE = process.env.JS_ENGINE || JS_ENGINE_JSC;
 
 const CMAKE_GENERATOR_TEMPLATE = OS_PLATFORM == 'win32' ? 'Ninja' : 'Unix Makefiles';
 
-const ANDROID_ABI_LIST = ['arm64-v8a', 'armeabi-v7a', 'x86_64'];
+// TODO: v8 因为mac编译环境问题  暂时不支持 x86_64 等后续编译环境搭建好再支持
+const ANDROID_ABI_LIST = JS_ENGINE === JS_ENGINE_V8 ? ['arm64-v8a', 'armeabi-v7a'] : ['arm64-v8a', 'armeabi-v7a', 'x86_64'];
 
 let ANDROID_HOME_PATH;
 
@@ -43,13 +44,8 @@ if (parseInt(NDK_VERSION.substr(0, 2)) < 20) {
     throw new Error('Android NDK version must at least >= 20');
 }
 
-const CMAKE_TOOLCHAIN_FILE = path.join(
-    ANDROID_HOME_PATH,
-    'ndk',
-    NDK_VERSION,
-    '/build/cmake/android.toolchain.cmake',
-);
 const ANDROID_NDK = path.join(ANDROID_HOME_PATH, '/ndk/', NDK_VERSION);
+const CMAKE_TOOLCHAIN_FILE = path.join(ANDROID_NDK, '/build/cmake/android.toolchain.cmake');
 
 task('clean-android', (done) => {
     console.log('clean-android');
@@ -121,6 +117,38 @@ task('build-android-jni', (done) => {
     execSync(`cp -r ${PATH_SOURCE}/include/ ${PATH_BUILD}/android/jni/include`, {
         stdio: 'inherit',
     });
+    // JNI config
+    fs.writeFileSync(
+        path.join(`${PATH_BUILD}/android/jni/Android.mk`),
+        `# Android.mk
+LOCAL_PATH := $(call my-dir)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := ${TARGET_NAME}
+LOCAL_SRC_FILES :=  ./libs/$(TARGET_ARCH_ABI)/lib${TARGET_NAME}.so
+LOCAL_EXPORT_C_INCLUDES := jni
+include $(PREBUILT_SHARED_LIBRARY)
+    
+include $(CLEAR_VARS)
+LOCAL_LDLIBS := -L$(SYSROOT)/usr/lib -llog
+LOCAL_SHARED_LIBRARIES := ${TARGET_NAME}
+LOCAL_MODULE := MyBridgeJNI
+LOCAL_SRC_FILES := MyBridge.cpp
+include $(BUILD_SHARED_LIBRARY)
+
+APP_ABI := ${ANDROID_ABI_LIST.join(' ')}`,
+        'utf8',
+    );
+    fs.writeFileSync(
+        path.join(`${PATH_BUILD}/android/jni/Application.mk`),
+        `# Application.mk
+APP_PLATFORM := android-16
+APP_STL:=c++_static
+APP_CPPFLAGS:=-frtti -fexceptions
+APP_ABI := ${ANDROID_ABI_LIST.join(' ')}
+APP_CPPFLAGS += -fexceptions`,
+        'utf8',
+    );
 
     execSync(
         `${ANDROID_NDK}/ndk-build NDK_PROJECT_PATH=./ NDK_APPLICATION_MK=./jni/Application.mk APP_BUILD_SCRIPT=./jni/Android.mk`,

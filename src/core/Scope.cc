@@ -15,7 +15,7 @@ EngineContext *createContext(int contextId)
 #include "jsengines/v8/V8Context.h"
 EngineContext *createContext(int contextId)
 {
-  return new v8::V8EngineContext(contextId);
+  return new V8EngineContext(contextId);
 }
 #elif BRIDGE_JS_ENGINE == 3
 #include "jsengines/quickjs/QuickJSContext.h"
