@@ -1,9 +1,12 @@
 package com.jnibridge;
 
+import android.util.Log;
+
 import com.jnibridge.modules.EmptyModule;
 import com.jnibridge.modules.ModuleBase;
 import com.jnibridge.modules.Navigation;
 import com.jnibridge.modules.UIModule;
+import com.jnibridge.modules.CanvasModule;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,6 +24,7 @@ public class ModuleManager {
         registerModule(_emtpyModule);
         registerModule(new UIModule(_scope));
         registerModule(new Navigation(_scope));
+        registerModule(new CanvasModule(_scope));
     }
 
     public EngineScope getScope() {
@@ -32,6 +36,7 @@ public class ModuleManager {
     }
 
     public String invokeModule(int callId, String moduleName, String methodName, String args) {
+        Log.d("JSEngine", "invokeModule moduleName=" + moduleName + ",methodName=" + methodName + ", args=" + args);
         String result = "";
         if(_modules.containsKey(moduleName)) {
             return _modules.get(moduleName).invokeMethod(callId, methodName, args);

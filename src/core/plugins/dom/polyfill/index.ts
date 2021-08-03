@@ -17,5 +17,3 @@ defineGlobalProperty('document', document);
 defineGlobalProperty('navigator', navigator);
 defineGlobalProperty('memoryStorage', memoryStorage);
 defineGlobalProperty('localStorage', localStorage);
-
-console.log('polyfill');

@@ -32,6 +32,7 @@ public class ModuleBase {
     public String getModuleName() {
         return _moduleName;
     }
+
     public EngineScope getScope() {
         return _scope;
     }

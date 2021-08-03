@@ -1,6 +1,6 @@
 package com.jnibridge;
 
-import org.json.JSONException;
+import android.app.Activity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,8 +9,8 @@ public class EngineScope {
     private static int contextIdSeed = 100;
     private static Map<Integer, EngineScope> _scopes = new HashMap<Integer, EngineScope>();
 
-    public static EngineScope createScope() {
-        EngineScope scope = new EngineScope();
+    public static EngineScope createScope(Activity activity) {
+        EngineScope scope = new EngineScope(activity);
         _scopes.put(scope.getContextId(), scope);
         return scope;
     }
@@ -25,15 +25,28 @@ public class EngineScope {
 
     private int _contextId;
     private ModuleManager _moduleManager;
+    private Activity _activity;
 
-    protected EngineScope() {
+    private ElementFactory _elementFactory;
+
+    protected EngineScope(Activity activity) {
         _contextId = ++EngineScope.contextIdSeed;
+        _activity = activity;
         _moduleManager = new ModuleManager(this);
         JSEngine.createScope(_contextId);
+        _elementFactory = new ElementFactory(this);
+    }
+
+    public ElementFactory getElementFactory() {
+        return _elementFactory;
     }
 
     public int getContextId() {
         return _contextId;
+    }
+
+    public Activity getActivity() {
+        return _activity;
     }
 
     public void evaluateJavaScript(String sourceCode, String sourceURL, int startLine) {
