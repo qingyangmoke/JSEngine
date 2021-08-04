@@ -35,7 +35,7 @@ typedef void *PTR_OBJECT;
     return singletonInstance;         \
   }
 
-namespace CPlusDemo
+namespace JSEngineNS
 {
   typedef std::function<void(void)> TimerCallback;
   typedef std::function<void(int, const char *)> EngineInvokeModuleCallback;

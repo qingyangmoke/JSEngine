@@ -35,7 +35,7 @@ typedef void *PTR_OBJECT;
     return singletonInstance;         \
   }
 
-namespace CPlusDemo
+namespace JSEngineNS
 {
   typedef std::function<void(int, const char *)> EngineInvokeModuleCallback;
   typedef std::function<void(int, const char *, const char *)> EngineNativeMethodLog;

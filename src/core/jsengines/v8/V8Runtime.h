@@ -5,7 +5,7 @@
 
 #include "include/jsengine_bridge.h"
 
-namespace CPlusDemo
+namespace JSEngineNS
 {
   class V8Runtime
   {

@@ -7,7 +7,7 @@
 
 #include <quickjs/quickjs.h>
 
-namespace CPlusDemo::quickjs
+namespace JSEngineNS::quickjs
 {
   class QuickJSEngineContext : public EngineContext
   {

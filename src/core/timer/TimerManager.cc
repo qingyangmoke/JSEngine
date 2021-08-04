@@ -1,5 +1,5 @@
 #include "TimerManager.h"
-using namespace CPlusDemo;
+using namespace JSEngineNS;
 
 TimerManager *TimerManager::singletonInstance = NULL;
 

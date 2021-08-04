@@ -1,8 +1,8 @@
 #include "QuickJSContext.h"
 #include "QuickJSConsole.h"
 #include "QuickJSModule.h"
-using namespace CPlusDemo;
-using namespace CPlusDemo::quickjs;
+using namespace JSEngineNS;
+using namespace JSEngineNS::quickjs;
 
 JSRuntime *QuickJSEngineContext::_runtime = NULL;
 

@@ -1,7 +1,7 @@
 #include "V8Runtime.h"
 #include "libplatform/libplatform.h"
 #include "V8EngineAllocator.h"
-using namespace CPlusDemo;
+using namespace JSEngineNS;
 using namespace v8;
 
 V8Runtime *V8Runtime::singletonInstance = NULL;

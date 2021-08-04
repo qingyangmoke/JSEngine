@@ -1,7 +1,7 @@
 #pragma once
 #include "JavaScriptCore.h"
 
-namespace CPlusDemo::jsc
+namespace JSEngineNS::jsc
 {
   class JSCoreConsole
   {

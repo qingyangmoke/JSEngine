@@ -1,7 +1,7 @@
 #include "include/jsengine_bridge.h"
 #include "plugins/dom/DomEnginePlugin.h"
 
-using namespace CPlusDemo;
+using namespace JSEngineNS;
 
 Engine *Engine::singletonInstance = NULL;
 

@@ -5,7 +5,7 @@
 #include "V8EngineModule.h"
 #include "V8Runtime.h"
 
-using namespace CPlusDemo;
+using namespace JSEngineNS;
 
 void invokeModuleCallback(const v8::FunctionCallbackInfo<v8::Value> &info)
 {  

@@ -4,11 +4,10 @@
 #include "V8Console.h"
 #include "V8RunTime.h"
 #include "include/jsengine_bridge.h"
-using namespace CPlusDemo;
+using namespace JSEngineNS;
 
 void _logCallback(std::string type, const v8::FunctionCallbackInfo<v8::Value> &info)
 {
-  EngineNativeMethods::instance()->log(0, type, "_logCallback begin");
   int contextId = -1;
   v8::Isolate *isolate = info.GetIsolate();
   try
@@ -37,7 +36,6 @@ void _logCallback(std::string type, const v8::FunctionCallbackInfo<v8::Value> &i
     EngineNativeMethods::instance()->log(contextId, type, "_logCallback error");
   }
   isolate = NULL;
-  EngineNativeMethods::instance()->log(0, type, "_logCallback end");
 }
 
 void infoCallback(const v8::FunctionCallbackInfo<v8::Value> &info)

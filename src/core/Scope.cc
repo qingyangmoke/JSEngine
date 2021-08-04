@@ -5,7 +5,7 @@
 
 #include "timer/TimerManager.h"
 
-using namespace CPlusDemo;
+using namespace JSEngineNS;
 
 #if BRIDGE_JS_ENGINE == 1
 #include "jsengines/jsc/JSCoreContext.h"

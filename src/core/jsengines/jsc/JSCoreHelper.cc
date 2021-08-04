@@ -5,7 +5,7 @@
 #include <vector>
 #include "JSCoreHelper.h"
 
-using namespace CPlusDemo;
+using namespace JSEngineNS;
 
 void jsc::throwJSError(JSContextRef ctx, const char *msg, JSValueRef *exception)
 {

@@ -35,7 +35,7 @@ int _printToAndroid(JNIEnv *env, int contextId, const char *tag, const char *mes
 
 JNIEXPORT int JNICALL Java_com_jnibridge_JSEngine_createScope(JNIEnv *env, jobject obj, int contextId)
 {
-    CPlusDemo::Engine::instance()->createScope(contextId);
+    JSEngineNS::Engine::instance()->createScope(contextId);
     return contextId;
 }
 
@@ -45,7 +45,7 @@ JNIEXPORT int JNICALL Java_com_jnibridge_JSEngine_evaluateJavaScript(JNIEnv *env
 
     const char *_sourceCode = env->GetStringUTFChars(sourceCode, 0);
     const char *_sourceURL = env->GetStringUTFChars(sourceURL, 0);
-    CPlusDemo::EngineScope *scope = CPlusDemo::Engine::instance()->getScope(contextId);
+    JSEngineNS::EngineScope *scope = JSEngineNS::Engine::instance()->getScope(contextId);
     if (scope != NULL)
     {
         try
@@ -71,12 +71,12 @@ JNIEXPORT int JNICALL Java_com_jnibridge_JSEngine_evaluateJavaScript(JNIEnv *env
 
 JNIEXPORT int JNICALL Java_com_jnibridge_JSEngine_initEngine(JNIEnv *env, jobject obj)
 {
-    if (CPlusDemo::EngineNativeMethods::instance()->invokeModulePointer != NULL)
+    if (JSEngineNS::EngineNativeMethods::instance()->invokeModulePointer != NULL)
     {
         return 0;
     }
 
-    CPlusDemo::EngineNativeMethods::instance()->invokeModulePointer = [env](int contextId, int callId, const char *moduleName, const char *methodName, const char *args) -> const char *
+    JSEngineNS::EngineNativeMethods::instance()->invokeModulePointer = [env](int contextId, int callId, const char *moduleName, const char *methodName, const char *args) -> const char *
     {
         _printToAndroid(env, contextId, "log", "invokeModule");
 
@@ -130,13 +130,13 @@ JNIEXPORT int JNICALL Java_com_jnibridge_JSEngine_initEngine(JNIEnv *env, jobjec
         }
     };
 
-    CPlusDemo::EngineNativeMethods::instance()->logPointer = [env](int contextId, const char *tagName, const char *message)
+    JSEngineNS::EngineNativeMethods::instance()->logPointer = [env](int contextId, const char *tagName, const char *message)
     {
         _printToAndroid(env, contextId, tagName, message);
     };
 
-    // CPlusDemo::EngineNativeMethods::instance()->invokeModulePointer(1, 2, "consoleM2", "print2", "args2");
-    // CPlusDemo::EngineNativeMethods::instance()->invokeModule(1, "consoleM2", "print2", "args2", NULL);
+    // JSEngineNS::EngineNativeMethods::instance()->invokeModulePointer(1, 2, "consoleM2", "print2", "args2");
+    // JSEngineNS::EngineNativeMethods::instance()->invokeModule(1, "consoleM2", "print2", "args2", NULL);
     return 0;
 }
 
@@ -145,7 +145,7 @@ JNIEXPORT int JNICALL Java_com_jnibridge_JSEngine_invokeModuleEvent(JNIEnv *env,
     const char *_result = env->GetStringUTFChars(result, 0);
     try
     {
-        CPlusDemo::EngineNativeMethods::instance()->invokeModuleEvent(contextId, callId, errorCode, _result);
+        JSEngineNS::EngineNativeMethods::instance()->invokeModuleEvent(contextId, callId, errorCode, _result);
     }
     catch (const std::exception &e)
     {
@@ -158,7 +158,7 @@ JNIEXPORT int JNICALL Java_com_jnibridge_JSEngine_invokeModuleEvent(JNIEnv *env,
 
 JNIEXPORT int JNICALL Java_com_jnibridge_JSEngine_invokeJSModule(JNIEnv *env, jobject obj, int contextId, jstring moduleName, jstring methodName, jstring args)
 {
-    CPlusDemo::EngineScope *scope = CPlusDemo::Engine::instance()->getScope(contextId);
+    JSEngineNS::EngineScope *scope = JSEngineNS::Engine::instance()->getScope(contextId);
     if (scope != NULL)
     {
         const char *_moduleName = env->GetStringUTFChars(moduleName, 0);

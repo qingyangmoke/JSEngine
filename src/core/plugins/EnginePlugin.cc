@@ -1,5 +1,5 @@
 #include "include/jsengine_bridge.h"
-using namespace CPlusDemo;
+using namespace JSEngineNS;
 EnginePlugin::EnginePlugin(const std::string &name)
 {
   this->name = name;

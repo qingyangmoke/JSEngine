@@ -2,7 +2,7 @@
 #include "include/jsengine_bridge.h"
 #include <quickjs/quickjs.h>
 
-namespace CPlusDemo::quickjs
+namespace JSEngineNS::quickjs
 {
   class QuickJSModule
   {

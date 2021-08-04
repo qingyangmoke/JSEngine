@@ -4,7 +4,7 @@
 
 #include "v8.h"
 
-namespace CPlusDemo
+namespace JSEngineNS
 {
   class V8EngineAllocator : public v8::ArrayBuffer::Allocator
   {

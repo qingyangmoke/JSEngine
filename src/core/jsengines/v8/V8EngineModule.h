@@ -1,7 +1,7 @@
 #pragma once
 #include "v8.h"
 #include "include/jsengine_bridge.h"
-namespace CPlusDemo
+namespace JSEngineNS
 {
   class V8EngineModule
   {

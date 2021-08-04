@@ -1,5 +1,5 @@
 #include "Timer.h"
-using namespace CPlusDemo;
+using namespace JSEngineNS;
 
 int Timer::handleSeed = 1;
 

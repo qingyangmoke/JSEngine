@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include "QuickJSConsole.h"
-using namespace CPlusDemo;
+using namespace JSEngineNS;
 using namespace quickjs;
 
 JSValue console_msg(const char *tag, JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)

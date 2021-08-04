@@ -1,6 +1,6 @@
 #pragma once
 #include "include/jsengine_bridge.h"
-namespace CPlusDemo
+namespace JSEngineNS
 {
   class DomEnginePlugin : public EnginePlugin
   {

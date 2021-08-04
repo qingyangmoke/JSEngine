@@ -7,7 +7,7 @@
 
 #include "include/jsengine_bridge.h"
 
-namespace CPlusDemo::jsc
+namespace JSEngineNS::jsc
 {
   typedef std::function<void(int32_t contextId, const char *errmsg)> JSExceptionHandler;
 

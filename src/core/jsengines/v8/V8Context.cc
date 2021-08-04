@@ -3,7 +3,7 @@
 #include "V8Runtime.h"
 #include "V8Console.h"
 #include "V8EngineModule.h"
-using namespace CPlusDemo;
+using namespace JSEngineNS;
 
 V8EngineContext::V8EngineContext(int contextId) : EngineContext(contextId)
 {
@@ -84,8 +84,7 @@ v8::Local<v8::Context> V8EngineContext::getLocalContext()
 
 void V8EngineContext::invokeJSModule(const char *moduleName, const char *methodName, const char *args)
 {
-  EngineNativeMethods::instance()->log(_contextId, "warn", ">>invokeJSModule");
-
+  EngineNativeMethods::instance()->log(_contextId, "warn", "v8 invokeJSModule");
   if (moduleName == NULL || methodName == NULL)
   {
     return;

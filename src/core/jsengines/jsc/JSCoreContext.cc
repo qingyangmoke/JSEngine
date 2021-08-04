@@ -8,8 +8,8 @@
 #include "JSCoreConsole.h"
 #include "JSCoreModule.h"
 
-using namespace CPlusDemo;
-using namespace CPlusDemo::jsc;
+using namespace JSEngineNS;
+using namespace JSEngineNS::jsc;
 
 JSValueRef delayCall(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount,
                      const JSValueRef *arguments, JSValueRef *exception)

@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 
-using namespace CPlusDemo;
+using namespace JSEngineNS;
 
 int flushBridgeTask()
 {

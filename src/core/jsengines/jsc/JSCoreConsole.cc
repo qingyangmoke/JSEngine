@@ -5,7 +5,7 @@
 #include "JSCoreHelper.h"
 #include "JSCoreContext.h"
 #include "include/jsengine_bridge.h"
-using namespace CPlusDemo;
+using namespace JSEngineNS;
 using namespace jsc;
 
 JSValueRef jsc_console_msg(std::string type, JSContextRef ctx, size_t argumentCount, const JSValueRef *arguments, JSValueRef *exception)

@@ -42,7 +42,7 @@ task('build-polyfill', (done) => {
         fs.writeFileSync(
             path.join(PATH_SOURCE, 'core/plugins/dom/DomPolyfill.cc'),
             `#include "DomPolyfill.h"
-void injectDomPolyfill(CPlusDemo::EngineScope *scope)
+void injectDomPolyfill(JSEngineNS::EngineScope *scope)
 {
     scope->evaluateJavaScript(${jsCode}, "internal://polyfill", 0);
 }`,

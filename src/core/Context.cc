@@ -1,6 +1,6 @@
 #include "include/jsengine_bridge.h"
 
-using namespace CPlusDemo;
+using namespace JSEngineNS;
 
 EngineContext::EngineContext(int contextId)
 {

@@ -2,7 +2,7 @@
 #include <string>
 #include "QuickJSModule.h"
 
-using namespace CPlusDemo;
+using namespace JSEngineNS;
 using namespace quickjs;
 
 JSValue invokeModule(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)

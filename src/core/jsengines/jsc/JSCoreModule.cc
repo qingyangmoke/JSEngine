@@ -9,7 +9,7 @@
 #include "JSCoreContext.h"
 #include "core/timer/TimerManager.h"
 
-using namespace CPlusDemo;
+using namespace JSEngineNS;
 using namespace jsc;
 
 JSValueRef invokeModule(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef *arguments, JSValueRef *exception)

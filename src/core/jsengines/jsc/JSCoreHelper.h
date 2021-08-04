@@ -31,7 +31,7 @@
     JSStringRelease(stackStr);                                                     \
   }
 
-namespace CPlusDemo::jsc
+namespace JSEngineNS::jsc
 {
   void throwJSError(JSContextRef ctx, const char *msg, JSValueRef *exception);
 

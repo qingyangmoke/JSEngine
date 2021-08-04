@@ -14,6 +14,9 @@ export default class TimerJSModule extends JSModule {
     }
 
     static setTimeout(callback: Function, delay: number): number {
+        if (!callback) {
+            return -1;
+        }
         const id = NativeModule.makeNativeCallID({
             moduleName: TIMER_MODULE_NAME,
             type: TIMER_SET_TIMEOUT,
@@ -37,6 +40,9 @@ export default class TimerJSModule extends JSModule {
     }
 
     static setInterval(callback: Function, interval: number): number {
+        if (!callback) {
+            return -1;
+        }
         const id = NativeModule.makeNativeCallID({
             moduleName: TIMER_MODULE_NAME,
             type: TIMER_SET_INTERVAL,
@@ -53,21 +59,23 @@ export default class TimerJSModule extends JSModule {
         const data = NativeModule.queryNativeCallID(id);
         if (data && data.moduleName === TIMER_MODULE_NAME && data.type === TIMER_SET_INTERVAL) {
             NativeModule.deleteNativeCallID(id);
+            NativeModule.invokeNativeModule(TIMER_NATIVE_MODULE_NAME, TIMER_CLEAR_INTERVAL, {
+                id: id,
+            });
         }
-        NativeModule.invokeNativeModule(TIMER_NATIVE_MODULE_NAME, TIMER_CLEAR_INTERVAL, {
-            id: id,
-        });
     }
 
     timerCallback(args: string) {
         console.log('timerCallback', args);
         const json = JSON.parse(args);
         const data = NativeModule.queryNativeCallID(json.id);
-        if (data && data.moduleName === this.moduleName) {
+        if (data && data.moduleName === TIMER_MODULE_NAME) {
+            data.callback();
             if (data.type === TIMER_SET_TIMEOUT) {
                 NativeModule.deleteNativeCallID(json.id);
             }
-            data.callback();
+        } else {
+            console.log('timerCallback not found', args, JSON.stringify(data));
         }
     }
 }

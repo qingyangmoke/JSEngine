@@ -48,23 +48,6 @@ public class MainActivity extends AppCompatActivity {
         System.err.println("launch");
         int r1 = JSEngine.initEngine();
         System.err.println("initEngine.result=" + r1);
-//        SurfaceView surfaceView = new SurfaceView(this);
-//        android.widget.FrameLayout.LayoutParams params = new android.widget.FrameLayout.LayoutParams(200, 200);
-//        this.addContentView(surfaceView, params);
-////        view.setLayoutParams(params);
-//        // 从SurfaceView的surfaceHolder里锁定获取Canvas
-//        Paint mPaint  = new Paint();
-//        mPaint.setColor(Color.BLACK);
-//        mPaint.setStyle(Paint.Style.STROKE);
-//        mPaint.setAntiAlias(true);
-//        mPaint.setStrokeWidth(5);
-//        SurfaceHolder surfaceHolder = surfaceView.getHolder();
-//        //获取Canvas
-//        Canvas c = surfaceHolder.lockCanvas();
-//        c.drawLine(0,50,200,50, mPaint);
-//        // ...（进行Canvas操作）
-//        // Canvas操作结束之后解锁并执行Canvas
-//        surfaceHolder.unlockCanvasAndPost(c);
 
         EngineScope scope = EngineScope.createScope(this);
         System.err.println("initEngine.scope.getContextId=" + scope.getContextId());
@@ -74,8 +57,6 @@ public class MainActivity extends AppCompatActivity {
 //        JSEngine.invokeJSModule(scope.getContextId(), "JSTimers", "sayHi" ,"hello1");
 //
 //        JSEngine.invokeJSModule(scope.getContextId(), "JSTimers", "sayHi" ,"hello2");
-////        String sourceCode = "window.nativeFlushQueueImmediate('nativeFlushQueueImmediate');window.nativeFlushQueueImmediate('nativeFlushQueueImmediate'); ";
-//        scope.evaluateJavaScript(sourceCode, "main.js", 0);
 
 //        CanvasElement canvas = new CanvasElement(1, scope);
 //        canvas.createRenderingContext("2d");

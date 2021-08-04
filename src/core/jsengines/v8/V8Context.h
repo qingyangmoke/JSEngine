@@ -5,7 +5,7 @@
 #include "include/jsengine_bridge.h"
 
 #include "v8.h"
-namespace CPlusDemo
+namespace JSEngineNS
 {
   class V8EngineContext : public EngineContext
   {

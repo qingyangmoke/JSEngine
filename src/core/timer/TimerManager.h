@@ -1,6 +1,6 @@
 #include "include/jsengine_bridge.h"
 #include "Timer.h"
-namespace CPlusDemo
+namespace JSEngineNS
 {
   class TimerManager
   {

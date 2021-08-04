@@ -17,18 +17,18 @@
 @implementation MyBridge
 
 + (void)initBridge {
-    if(!CPlusDemo::EngineNativeMethods::instance()->invokeModulePointer) {
-        CPlusDemo::EngineNativeMethods::instance()->invokeModulePointer = ^const char *(int contextId, int callId, const char *moduleName, const char *methodName, const char *args) {
+    if(!JSEngineNS::EngineNativeMethods::instance()->invokeModulePointer) {
+        JSEngineNS::EngineNativeMethods::instance()->invokeModulePointer = ^const char *(int contextId, int callId, const char *moduleName, const char *methodName, const char *args) {
             // 需要在这里实现module对应的处理类
             printf("【MyBridge】moduleName=%s,methodName=%s, args=%s \n",  moduleName, methodName, args);
             NSString *str = [[NSString alloc] initWithFormat: @"{\"moduleName\": \"%@\", \"methodName\": \"%@\"}", [NSString stringWithUTF8String: moduleName], [NSString stringWithUTF8String: methodName]];
             // 处理完毕通过事件回调给值
-            CPlusDemo::EngineNativeMethods::instance()->invokeModuleEvent(contextId, callId, 0, [str UTF8String]);
+            JSEngineNS::EngineNativeMethods::instance()->invokeModuleEvent(contextId, callId, 0, [str UTF8String]);
             return "success";
         };
     }
-    if(!CPlusDemo::EngineNativeMethods::instance()->logPointer) {
-        CPlusDemo::EngineNativeMethods::instance()->logPointer = ^const char *(int contextId, const char *tagName, const char *message) {
+    if(!JSEngineNS::EngineNativeMethods::instance()->logPointer) {
+        JSEngineNS::EngineNativeMethods::instance()->logPointer = ^const char *(int contextId, const char *tagName, const char *message) {
             // 需要在这里实现module对应的处理类
             printf("【Console】contextId=%d, tagName=%s, message=%s \n",  contextId, tagName, message);
             return "success";
@@ -47,7 +47,7 @@
 
 // 测试传递字符串
 + (int)printCPlusString:(NSString *) str {
-    CPlusDemo::Student *student = new CPlusDemo::Student([@"hello" UTF8String], 10);
+    JSEngineNS::Student *student = new JSEngineNS::Student([@"hello" UTF8String], 10);
     student->say();
     delete student;
     return printString([str UTF8String]);
@@ -69,9 +69,9 @@
 + (int)engineTest {
     int contextId = 1;
     // 获取全局对象
-    CPlusDemo::Engine* engine = CPlusDemo::Engine::instance();
+    JSEngineNS::Engine* engine = JSEngineNS::Engine::instance();
     // 创建jsscope
-    CPlusDemo::EngineScope* scope = engine->createScope(contextId);
+    JSEngineNS::EngineScope* scope = engine->createScope(contextId);
     printf("contextId=%d \n\t", scope->getContextId());
     
     scope->evaluateJavaScript([@"var a = 1; window.delayCall(function(){ console.log('callback', 'args1', 'args2'); }, 2000);" UTF8String], [@"" UTF8String], 0);
@@ -82,7 +82,7 @@
     
     scope = NULL; // 不用的时候把指针设置为空
     
-    CPlusDemo::EngineScope* scope2 = engine->getScope(contextId);
+    JSEngineNS::EngineScope* scope2 = engine->getScope(contextId);
     printf("contextId=%d \n\t", scope2->getContextId());
     scope2 = NULL; // 不用的时候把指针设置为空
     
@@ -90,7 +90,7 @@
     engine->removeScope(contextId);
     
     // 已经释放 则获取不到了
-    CPlusDemo::EngineScope* scope3 = engine->getScope(contextId);
+    JSEngineNS::EngineScope* scope3 = engine->getScope(contextId);
     printf("contextId=%d \n\t", scope3 == NULL ? -1 : scope3->getContextId());
     
     // C++ string 转成NSString使用

@@ -18,7 +18,7 @@
 - (id)initWithContextId: (int)contextId {
     if(self = [super init]){
         _contextId = contextId;
-        CPlusDemo::Engine::instance()->createScope(contextId);
+        JSEngineNS::Engine::instance()->createScope(contextId);
     }
     return self;
 }
@@ -28,7 +28,7 @@
 }
 
 - (void)evaluateJavaScript: (NSString *) sourceCode widthSourceURL: (NSString *) sourceURL widthStartLine: (int) startLine {
-    CPlusDemo::EngineScope* scope = CPlusDemo::Engine::instance()->getScope(_contextId);
+    JSEngineNS::EngineScope* scope = JSEngineNS::Engine::instance()->getScope(_contextId);
     if(scope != NULL) {
         scope->evaluateJavaScript([sourceCode UTF8String], [sourceURL UTF8String], startLine);
     } else {
@@ -40,7 +40,7 @@
 // 对象被销毁
 -(void)dealloc {
     printf("【EngineScope】 dealloc _contextId=%d \n", _contextId);
-    CPlusDemo::Engine::instance()->removeScope(_contextId);
+    JSEngineNS::Engine::instance()->removeScope(_contextId);
 }
 @end
 

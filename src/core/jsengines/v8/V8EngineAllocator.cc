@@ -1,7 +1,7 @@
 #include "V8EngineAllocator.h"
 #include <cstdlib>
 
-using namespace CPlusDemo;
+using namespace JSEngineNS;
 
 V8EngineAllocator::V8EngineAllocator() : v8::ArrayBuffer::Allocator()
 {

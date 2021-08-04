@@ -4,6 +4,7 @@ console.log('javascript', 'hello world');
 var toResult = window.__module__.invokeModule('Navigation', 'to', { name: 'x2' }, function (errorCode, result) {
     console.log('javascript', 'invokeModule', 'errorCode=', errorCode, 'result=', result);
 });
+
 console.log('toResult=', toResult);
 
 window['JSTimers'] = {
@@ -13,17 +14,20 @@ window['JSTimers'] = {
 };
 
 window.setTimeout(function() {
-  console.log('setTimeout callback');
+  console.log('setTimeout callback', '100');
 }, 1000);
+
 
 var handle = window.setInterval(function() {
   console.log('setInterval callback');
 }, 1000);
 
 window.setTimeout(function() {
-    console.log('setTimeout callback2');
-  window.clearInterval(handle);
+  clearInterval(handle);
+  console.log('setTimeout callback', '500');
 }, 5000);
+
+
 
 //
 //window.__module__.invokeModule('UI', 'refresh', { name: 'x2' }, function (errorCode, result) {

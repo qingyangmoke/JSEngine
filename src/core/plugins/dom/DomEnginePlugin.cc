@@ -2,7 +2,7 @@
 
 #include "DomPolyfill.h"
 
-using namespace CPlusDemo;
+using namespace JSEngineNS;
 
 DomEnginePlugin::DomEnginePlugin() : EnginePlugin("dom") {}
 
