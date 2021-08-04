@@ -71,10 +71,10 @@ public class MainActivity extends AppCompatActivity {
         String bundleCode = loadBundle("main.js");
         scope.evaluateJavaScript(bundleCode, "main.js", 0);
 
-        JSEngine.invokeJSModule(scope.getContextId(), "JSTimers", "sayHi" ,"hello1");
-
-        JSEngine.invokeJSModule(scope.getContextId(), "JSTimers", "sayHi" ,"hello2");
-//        String sourceCode = "window.nativeFlushQueueImmediate('nativeFlushQueueImmediate');window.nativeFlushQueueImmediate('nativeFlushQueueImmediate'); ";
+//        JSEngine.invokeJSModule(scope.getContextId(), "JSTimers", "sayHi" ,"hello1");
+//
+//        JSEngine.invokeJSModule(scope.getContextId(), "JSTimers", "sayHi" ,"hello2");
+////        String sourceCode = "window.nativeFlushQueueImmediate('nativeFlushQueueImmediate');window.nativeFlushQueueImmediate('nativeFlushQueueImmediate'); ";
 //        scope.evaluateJavaScript(sourceCode, "main.js", 0);
 
 //        CanvasElement canvas = new CanvasElement(1, scope);

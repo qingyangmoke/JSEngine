@@ -7,6 +7,7 @@ import com.jnibridge.modules.ModuleBase;
 import com.jnibridge.modules.Navigation;
 import com.jnibridge.modules.UIModule;
 import com.jnibridge.modules.CanvasModule;
+import com.jnibridge.modules.timer.JSTimerModule;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,6 +26,7 @@ public class ModuleManager {
         registerModule(new UIModule(_scope));
         registerModule(new Navigation(_scope));
         registerModule(new CanvasModule(_scope));
+        registerModule(new JSTimerModule(_scope));
     }
 
     public EngineScope getScope() {
@@ -36,7 +38,7 @@ public class ModuleManager {
     }
 
     public String invokeModule(int callId, String moduleName, String methodName, String args) {
-        Log.d("JSEngine", "invokeModule moduleName=" + moduleName + ",methodName=" + methodName + ", args=" + args);
+        JSEngine.log(this.getScope().getContextId(), "log", "invokeModule moduleName=" + moduleName + ",methodName=" + methodName + ", args=" + args);
         String result = "";
         if(_modules.containsKey(moduleName)) {
             return _modules.get(moduleName).invokeMethod(callId, methodName, args);
