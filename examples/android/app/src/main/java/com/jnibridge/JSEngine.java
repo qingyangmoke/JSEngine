@@ -14,12 +14,11 @@ public class JSEngine {
             System.err.println("UnsatisfiedLinkError:" + e.toString());
         }
     }
-    public static native int sayHello();
-    public static native int flushBridgeTask();
     public static native int initEngine();
     public static native int createScope(int contextId);
     public static native int evaluateJavaScript(int contextId, String sourceCode, String sourceURL, int startLine);
     public static native int invokeModuleEvent(int contextId, int callId, int errorCode, String result);
+    public static native int invokeJSModule(int contextId, String moduleName, String methodName, String args);
 
     public static String invokeModule(int contextId, int callId, String moduleName, String methodName, String args) {
         log(contextId, "info", "contextId="+ contextId +", callId=" + callId + ", moduleName=" + moduleName+", methodName=" + methodName + ", args=" + args);

@@ -7,6 +7,7 @@
 #include "JSCoreModule.h"
 #include "JSCoreHelper.h"
 #include "JSCoreContext.h"
+#include "core/timer/TimerManager.h"
 
 using namespace CPlusDemo;
 using namespace jsc;
@@ -59,11 +60,75 @@ JSValueRef invokeModule(JSContextRef ctx, JSObjectRef function, JSObjectRef this
   }
 }
 
+JSValueRef setTimer(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef *arguments, JSValueRef *exception, int isTimeout)
+{  
+  JSCoreEngineContext *context = JSCoreEngineContext::getContext(ctx);
+  EngineNativeMethods::instance()->log(context->getContextId(), "info", "setTime1");
+  JSObjectRef callbackObjectRef = NULL;
+  if (argumentCount > 0 && JSValueIsObject(ctx, arguments[0]))
+  {
+    callbackObjectRef = JSValueToObject(ctx, arguments[0], exception);
+    if (JSObjectIsFunction(ctx, callbackObjectRef))
+    {
+      EngineNativeMethods::instance()->log(context->getContextId(), "info", "setTime2");
+      TimerCallback callback = [ctx, callbackObjectRef, thisObject, exception]()
+      {
+        EngineNativeMethods::instance()->log(0, "info", "setTime callback");
+        JSValueRef callbackArgs[1];
+        callbackArgs[0] = thisObject;
+        JSObjectCallAsFunction(ctx, callbackObjectRef, thisObject, 1, callbackArgs, exception);
+      };
+      int delay = 0;
+      if (argumentCount > 1 && JSValueIsNumber(ctx, arguments[1]))
+      {
+        delay = JSValueToNumber(ctx, arguments[1], exception);
+      }
+      int handle = -1;
+      if (isTimeout)
+      {
+        handle = TimerManager::instance()->setTimeout(context->getContextId(), callback, delay);
+      }
+      else
+      {
+        handle = TimerManager::instance()->setInterval(context->getContextId(), callback, delay);
+      }
+      return JSValueMakeNumber(ctx, handle);
+    }
+  }
+  return JSValueMakeNumber(ctx, -1);
+}
+
+JSValueRef setTimeout(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef *arguments, JSValueRef *exception)
+{
+  return setTimer(ctx, function, thisObject, argumentCount, arguments, exception, 1);
+}
+
+JSValueRef setInterval(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef *arguments, JSValueRef *exception)
+{
+  return setTimer(ctx, function, thisObject, argumentCount, arguments, exception, 0);
+}
+
+JSValueRef clearInterval(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef *arguments, JSValueRef *exception)
+{
+  JSCoreEngineContext *context = JSCoreEngineContext::getContext(ctx);
+  if (argumentCount > 0 && JSValueIsNumber(ctx, arguments[0]))
+  {
+    int handle = JSValueToNumber(ctx, arguments[1], exception);
+    TimerManager::instance()->clearTimer(context->getContextId(), handle);
+    return JSValueMakeNumber(ctx, handle);
+  }
+  return JSValueMakeNumber(ctx, -1);
+}
+
 void JSCoreModule::initModule(JSGlobalContextRef jscContext, JSObjectRef global)
 {
   JSClassDefinition module_def = kJSClassDefinitionEmpty;
   JSStaticFunction module_funcs[] = {
       {"invokeModule", invokeModule, kJSPropertyAttributeDontDelete | kJSPropertyAttributeReadOnly},
+      // {"setInterval", setInterval, kJSPropertyAttributeDontDelete | kJSPropertyAttributeReadOnly},
+      // {"clearInterval", clearInterval, kJSPropertyAttributeDontDelete | kJSPropertyAttributeReadOnly},
+      // {"setTimeout", setTimeout, kJSPropertyAttributeDontDelete | kJSPropertyAttributeReadOnly},
+      // {"clearTimeout", clearInterval, kJSPropertyAttributeDontDelete | kJSPropertyAttributeReadOnly},
       {} // null termination
   };
   module_def.staticFunctions = module_funcs;

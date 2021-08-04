@@ -79,6 +79,8 @@ list(APPEND APP_SOURCE
   core/plugins/EnginePlugin.cc
   core/plugins/dom/DomPolyfill.cc
   core/plugins/dom/DomEnginePlugin.cc
+  core/timer/Timer.cc
+  core/timer/TimerManager.cc  
 )
 
 list(APPEND BRIDGE_INCLUDE

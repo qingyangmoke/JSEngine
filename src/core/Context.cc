@@ -18,6 +18,11 @@ bool EngineContext::evaluateJavaScript(const char *sourceCode, const char *sourc
   return false;
 }
 
+void EngineContext::invokeJSModule(const char *moduleName, const char *methodName, const char *args)
+{
+  std::cout << "evaluateJavaScript未实现" << std::endl;
+}
+
 EngineContext::~EngineContext()
 {
    std::cout << "EngineContext destroyed" << std::endl;

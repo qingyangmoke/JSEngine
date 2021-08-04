@@ -91,11 +91,10 @@ JSCoreEngineContext::JSCoreEngineContext(int contextId) : EngineContext(contextI
   JSStringRelease(windowName);
   JSStringRelease(globalThis);
 
-
   JSStringRef contextIdJSString = JSStringCreateWithUTF8CString("contextId");
   JSObjectSetProperty(_jscContext, global, contextIdJSString, JSValueMakeNumber(_jscContext, contextId), kJSPropertyAttributeNone, nullptr);
   JSStringRelease(contextIdJSString);
-  
+
   JSCoreConsole::initConsole(_jscContext, global);
   JSCoreModule::initModule(_jscContext, global);
 }
@@ -144,6 +143,41 @@ bool JSCoreEngineContext::handleException(JSValueRef exc)
 JSCoreEngineContext *JSCoreEngineContext::getContext(JSContextRef context)
 {
   return reinterpret_cast<JSCoreEngineContext *>(JSObjectGetPrivate(JSContextGetGlobalObject(context)));
+}
+
+/**
+ * 调用js module
+ * */
+void JSCoreEngineContext::invokeJSModule(const char *moduleName, const char *methodName, const char *args)
+{
+  if (moduleName == NULL || methodName == NULL)
+  {
+    return;
+  }
+  JSObjectRef global = this->global();
+  JSValueRef exception = NULL;
+  JSStringRef moduleNameRef = JSStringCreateWithUTF8CString(moduleName);
+  JSValueRef moduleValueRef = JSObjectGetProperty(this->context(), global, moduleNameRef, &exception);
+  if (!JSValueIsNull(this->context(), moduleValueRef) && JSValueIsObject(this->context(), moduleValueRef))
+  {
+    JSObjectRef moduleRef = JSValueToObject(this->context(), moduleValueRef, &exception);
+    JSStringRef methodNameRef = JSStringCreateWithUTF8CString(methodName);
+    JSValueRef methodValueRef = JSObjectGetProperty(this->context(), moduleRef, methodNameRef, &exception);
+    if (!JSValueIsNull(this->context(), methodValueRef) && JSValueIsObject(this->context(), methodValueRef))
+    {
+      JSObjectRef methodRef = JSValueToObject(this->context(), methodValueRef, &exception);
+      if (JSObjectIsFunction(this->context(), methodRef))
+      {
+        JSStringRef argsValueRef = args == NULL ? JSStringCreateWithUTF8CString("") : JSStringCreateWithUTF8CString(args);
+        JSValueRef callbackArgs[1];
+        callbackArgs[0] = JSValueMakeString(this->context(), argsValueRef);
+        JSObjectCallAsFunction(this->context(), methodRef, moduleRef, 1, callbackArgs, &exception);
+        JSStringRelease(argsValueRef);
+      }
+    }
+    JSStringRelease(methodNameRef);
+  }
+  JSStringRelease(moduleNameRef);
 }
 
 JSCoreEngineContext::~JSCoreEngineContext()

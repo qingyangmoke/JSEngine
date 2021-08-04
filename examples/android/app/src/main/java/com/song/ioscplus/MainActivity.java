@@ -70,6 +70,10 @@ public class MainActivity extends AppCompatActivity {
         System.err.println("initEngine.scope.getContextId=" + scope.getContextId());
         String bundleCode = loadBundle("main.js");
         scope.evaluateJavaScript(bundleCode, "main.js", 0);
+
+        JSEngine.invokeJSModule(scope.getContextId(), "JSTimers", "sayHi" ,"hello1");
+
+        JSEngine.invokeJSModule(scope.getContextId(), "JSTimers", "sayHi" ,"hello2");
 //        String sourceCode = "window.nativeFlushQueueImmediate('nativeFlushQueueImmediate');window.nativeFlushQueueImmediate('nativeFlushQueueImmediate'); ";
 //        scope.evaluateJavaScript(sourceCode, "main.js", 0);
 

@@ -3,6 +3,8 @@
 
 #include "include/jsengine_bridge.h"
 
+#include "timer/TimerManager.h"
+
 using namespace CPlusDemo;
 
 #if BRIDGE_JS_ENGINE == 1
@@ -50,9 +52,19 @@ bool EngineScope::evaluateJavaScript(const char *sourceCode, const char *sourceU
   return _context->evaluateJavaScript(sourceCode, sourceURL, startLine);
 }
 
+void EngineScope::invokeJSModule(const char *moduleName, const char *methodName, const char *args)
+{
+  if (_context == NULL)
+  {
+    return;
+  }
+  return _context->invokeJSModule(moduleName, methodName, args);
+}
+
 EngineScope::~EngineScope()
 {
   std::cout << "EngineScope destoryed" << _contextId << std::endl;
+  // TimerManager::instance()->clearAllTimer(this->getContextId());
   delete _context;
   _context = NULL;
 }

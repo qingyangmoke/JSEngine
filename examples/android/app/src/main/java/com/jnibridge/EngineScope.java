@@ -2,6 +2,9 @@ package com.jnibridge;
 
 import android.app.Activity;
 
+import com.jnibridge.modules.TimerManager;
+
+import java.sql.Time;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +31,7 @@ public class EngineScope {
     private Activity _activity;
 
     private ElementFactory _elementFactory;
+    private TimerManager _timerManager;
 
     protected EngineScope(Activity activity) {
         _contextId = ++EngineScope.contextIdSeed;
@@ -35,6 +39,7 @@ public class EngineScope {
         _moduleManager = new ModuleManager(this);
         JSEngine.createScope(_contextId);
         _elementFactory = new ElementFactory(this);
+        _timerManager = new TimerManager(this);
     }
 
     public ElementFactory getElementFactory() {
@@ -55,5 +60,9 @@ public class EngineScope {
 
     public String invokeModule(int callId, String moduleName, String methodName, String args) {
         return _moduleManager.invokeModule(callId, moduleName, methodName, args);
+    }
+
+    public void invokeJSModule(String moduleName, String methodName, String args) {
+        JSEngine.invokeJSModule(_contextId, moduleName, methodName , args);
     }
 }

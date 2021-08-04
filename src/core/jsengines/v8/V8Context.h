@@ -14,6 +14,7 @@ namespace CPlusDemo
     ~V8EngineContext() override;
     v8::Local<v8::Context> getLocalContext();
     bool evaluateJavaScript(const char *sourceCode, const char *sourceURL, int startLine) override;
+    void invokeJSModule(const char *moduleName, const char *methodName, const char *args) override;
 
   protected:
     v8::Persistent<v8::Context> context;

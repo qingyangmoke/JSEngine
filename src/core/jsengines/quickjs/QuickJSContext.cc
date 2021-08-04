@@ -38,6 +38,29 @@ bool QuickJSEngineContext::evaluateJavaScript(const char *sourceCode, const char
   return false;
 }
 
+void QuickJSEngineContext::invokeJSModule(const char *moduleName, const char *methodName, const char *args)
+{
+  EngineNativeMethods::instance()->log(_contextId, "warn", "quickjs >>invokeJSModule");
+
+  if (moduleName == NULL || methodName == NULL)
+  {
+    return;
+  }
+  JSValue global = JS_GetGlobalObject(_context);
+
+  JSValue moduleValueRef = JS_GetPropertyStr(_context, global, moduleName);
+  if (!JS_IsException(moduleValueRef) && JS_IsObject(moduleValueRef))
+  {
+    JSValue methodValueRef = JS_GetPropertyStr(_context, moduleValueRef, methodName);
+    if (!JS_IsException(methodValueRef) && JS_IsFunction(_context, methodValueRef))
+    {
+      JSValue callbackArgs[1];
+      callbackArgs[0] = args == NULL ? JS_NewString(_context, "") : JS_NewString(_context, args);
+      JS_Call(_context, methodValueRef, moduleValueRef, 2, callbackArgs);
+    }
+  }
+}
+
 QuickJSEngineContext::~QuickJSEngineContext()
 {
   JS_FreeContext(_context);

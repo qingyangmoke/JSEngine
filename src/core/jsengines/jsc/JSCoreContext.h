@@ -18,7 +18,7 @@ namespace CPlusDemo::jsc
     JSCoreEngineContext(int contextId);
     ~JSCoreEngineContext() override;
     bool evaluateJavaScript(const char *sourceCode, const char *sourceURL, int startLine) override;
-
+    void invokeJSModule(const char *moduleName, const char *methodName, const char *args) override;
   protected:
     JSObjectRef global();
     JSGlobalContextRef context();

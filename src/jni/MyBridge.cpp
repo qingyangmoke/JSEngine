@@ -8,7 +8,7 @@ int _printToAndroid(JNIEnv *env, int contextId, const char *tag, const char *mes
     jclass JSEngine = env->FindClass("com/jnibridge/JSEngine");
     if (JSEngine == NULL)
     {
-        _printToAndroid(env, contextId, "error", "com.jnibridge.JSEngine Class not found");
+        printf("JSEngine not found");
         return 1;
     }
 
@@ -16,17 +16,20 @@ int _printToAndroid(JNIEnv *env, int contextId, const char *tag, const char *mes
     if (logMethod == NULL)
     {
         printf("log Method not found");
+        // 删除局部引用
+        env->DeleteLocalRef(JSEngine);
         return 2;
     }
-    
-    jstring _tagName = env->NewStringUTF(tag);    
+
+    jstring _tagName = env->NewStringUTF(tag);
     jstring _message = env->NewStringUTF(message);
     env->CallStaticVoidMethod(JSEngine, logMethod, contextId, _tagName, _message);
+    
+    env->DeleteLocalRef(_tagName);
+    env->DeleteLocalRef(_message);
 
     // 删除局部引用
     env->DeleteLocalRef(JSEngine);
-    env->DeleteLocalRef(_tagName);
-    env->DeleteLocalRef(_message);
     return 0;
 }
 
@@ -53,6 +56,7 @@ JNIEXPORT int JNICALL Java_com_jnibridge_JSEngine_evaluateJavaScript(JNIEnv *env
         {
             _printToAndroid(env, contextId, "error", e.what());
         }
+        scope = NULL;
     }
     else
     {
@@ -61,7 +65,7 @@ JNIEXPORT int JNICALL Java_com_jnibridge_JSEngine_evaluateJavaScript(JNIEnv *env
 
     env->ReleaseStringUTFChars(sourceCode, _sourceCode);
     env->ReleaseStringUTFChars(sourceURL, _sourceURL);
-
+    
     return result;
 }
 
@@ -87,6 +91,8 @@ JNIEXPORT int JNICALL Java_com_jnibridge_JSEngine_initEngine(JNIEnv *env, jobjec
         if (invokeModuleMethod == NULL)
         {
             _printToAndroid(env, contextId, "error", "invokeModule Method not found");
+            // 删除局部引用
+            env->DeleteLocalRef(JSEngine);
             return NULL;
         }
 
@@ -102,19 +108,24 @@ JNIEXPORT int JNICALL Java_com_jnibridge_JSEngine_initEngine(JNIEnv *env, jobjec
         {
             _printToAndroid(env, contextId, "error", e.what());
         }
+
         
-        // 删除局部引用
-        env->DeleteLocalRef(JSEngine);
         env->DeleteLocalRef(_moduleName);
         env->DeleteLocalRef(_methodName);
         env->DeleteLocalRef(_args);
 
-        if(result != NULL) {
+        // 删除局部引用
+        env->DeleteLocalRef(JSEngine);
+
+        if (result != NULL)
+        {
             const char *message = env->GetStringUTFChars(result, 0);
             env->ReleaseStringUTFChars(result, message);
             env->DeleteLocalRef(result);
             return message;
-        } else {
+        }
+        else
+        {
             return NULL;
         }
     };
@@ -143,4 +154,21 @@ JNIEXPORT int JNICALL Java_com_jnibridge_JSEngine_invokeModuleEvent(JNIEnv *env,
 
     env->ReleaseStringUTFChars(result, _result);
     return 1;
+}
+
+JNIEXPORT int JNICALL Java_com_jnibridge_JSEngine_invokeJSModule(JNIEnv *env, jobject obj, int contextId, jstring moduleName, jstring methodName, jstring args)
+{
+    CPlusDemo::EngineScope *scope = CPlusDemo::Engine::instance()->getScope(contextId);
+    if (scope != NULL)
+    {
+        const char *_moduleName = env->GetStringUTFChars(moduleName, 0);
+        const char *_methodName = env->GetStringUTFChars(methodName, 0);
+        const char *_args = env->GetStringUTFChars(args, 0);
+        scope->invokeJSModule(_moduleName, _methodName, _args);
+        env->ReleaseStringUTFChars(moduleName, _moduleName);
+        env->ReleaseStringUTFChars(methodName, _methodName);
+        env->ReleaseStringUTFChars(args, _args);
+        scope = NULL;
+    }
+    return 0;
 }

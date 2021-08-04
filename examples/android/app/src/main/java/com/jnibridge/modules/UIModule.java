@@ -13,6 +13,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class UIModule extends ModuleBase {
     public UIModule(EngineScope scope) {
@@ -30,6 +32,15 @@ public class UIModule extends ModuleBase {
             jsonException.printStackTrace();
         }
         invokeMethodCallback(callId, 0, jsonObject);
+
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask(){
+            @Override
+            public void run(){
+                timer.cancel();
+                Log.i("tag", "A Kiss every 5 seconds");
+            }
+        },0,5000);
         return "";
     }
 

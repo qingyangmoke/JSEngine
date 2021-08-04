@@ -20,6 +20,9 @@ extern "C"
   // invokeModule回调
   JNIEXPORT int JNICALL Java_com_jnibridge_JSEngine_invokeModuleEvent(JNIEnv *env, jobject obj, int contextId, int callId, int errorCode, jstring result);
 
+  // native 调用js方法
+  JNIEXPORT int JNICALL Java_com_jnibridge_JSEngine_invokeJSModule(JNIEnv *env, jobject obj, int contextId, jstring moduleName, jstring methodName, jstring args);
+ 
 #ifdef __cplusplus
 }
 #endif

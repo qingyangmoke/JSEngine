@@ -83,7 +83,8 @@
     "malloc.h": "c",
     "stdlib.h": "c",
     "variant": "cpp",
-    "clocale": "cpp"
+    "clocale": "cpp",
+    "__memory": "cpp"
   },
   "cmake.sourceDirectory": "${workspaceFolder}/src"
 }

@@ -15,6 +15,8 @@ namespace CPlusDemo::quickjs
     QuickJSEngineContext(int contextId);
     ~QuickJSEngineContext() override;
     bool evaluateJavaScript(const char *sourceCode, const char *sourceURL, int startLine) override;
+    void invokeJSModule(const char *moduleName, const char *methodName, const char *args) override;
+    
   protected:
     static JSRuntime *_runtime;
   private:
