@@ -14,10 +14,12 @@
 {
 @private
     int _contextId;
+    NSMutableDictionary* _modules;
 }
 - (id)initWithContextId: (int)contextId;
 - (int)getContextId;
 - (void)evaluateJavaScript: (NSString *) sourceCode widthSourceURL: (NSString *) sourceURL widthStartLine: (int) startLine;
+- (void)invokeJSModule: (NSString *) moduleName widthMethodName: (NSString *) methodName widthArgs: (NSString *) args;
 - (void)dealloc;
 @end
 

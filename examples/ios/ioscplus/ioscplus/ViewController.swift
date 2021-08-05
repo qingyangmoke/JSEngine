@@ -17,45 +17,29 @@ class ViewController: UIViewController {
         print("testCallback result=", result, self.name);
     }
     
-    func testNormalTypes() {
-        let result = MyBridge.flushBridgeTask();
-        print("result=", result);
-        MyBridge.printCPlusString("swift string");
-        MyBridge.testStruct("nativeString", widthLength: 100);
-        // 把当前对象转换成C++识别的指针类型void *
-        let observer = self.convertToRawPointer(obj: self);
-        MyBridge.testCallback("swift", widthCallBack: { (result: UnsafePointer<Int8>?, observer: UnsafeMutableRawPointer?) in
-            // 把C++返回的对象指针转换成ViewController
-            let mySelf = Unmanaged<ViewController>.fromOpaque(observer!).takeUnretainedValue();
-            // let mySelf = self.fromPointer(observer: observer!) as ViewController;
-            mySelf.printResult(result: NSString(utf8String: result!) ?? "");
-        }, withTarget: observer);
-//        MyBridge.engineTest();Ï
-    }
-    
     func testEngine() {
         var sourceCode = "";
-        var srouceURL = "";
+        var sourceURL = "";
         do
         {
-            srouceURL = Bundle.main.path(forResource: "main", ofType: "js")!;
-            sourceCode = try String(contentsOfFile: srouceURL)
+            sourceURL = Bundle.main.path(forResource: "main", ofType: "js")!;
+            sourceCode = try String(contentsOfFile: sourceURL)
         }
         catch
         {
             print("Contents could not be loaded.")
         }
-        let scope = MyBridge.createScope(2);
-        scope!.evaluateJavaScript(sourceCode, widthSourceURL: srouceURL, widthStartLine: 0);
+        var scope = OCSwiftEngineProxy.createScope();
+        scope.evaluateJavaScript(sourceCode: sourceCode, sourceURL: sourceURL, startLine: 0);
+        scope.invokeJSModule(moduleName: "JSTimers", methodName: "sayHi", args: "from swift");
+        
+//        scope.evaluateJavaScript(sourceCode, widthSourceURL: srouceURL, widthStartLine: 0);
+//        scope.invokeJSModule("JSTiremoveScopemers", widthMethodName: "sayHi", widthArgs: "from swift");
+        // 销毁
+//        OCSwiftEngineProxy.removeScope(contextId: scope.getContextId());
     }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        print("hello world!");
-        MyBridge.initBridge();
-        self.testEngine();
-        
-        
+
+    func testAlert() {
         let param = ["key1": "value1", "key2": "value2"];
         let title = param["title"] as? String ?? "提示";
         let message = param["message"]  as? String ?? "";
@@ -79,5 +63,12 @@ class ViewController: UIViewController {
         DispatchQueue.main.async { [weak self] in
             self?.present(alertController, animated: true, completion: nil)
         }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        print("hello world!");
+        MyBridge.initBridge();
+        self.testEngine();
     }
 }

@@ -37,6 +37,16 @@
     scope = NULL;
 }
 
+- (void)invokeJSModule: (NSString *) moduleName widthMethodName: (NSString *) methodName widthArgs: (NSString *) args {
+    JSEngineNS::EngineScope* scope = JSEngineNS::Engine::instance()->getScope(_contextId);
+    if(scope != NULL) {
+        scope->invokeJSModule([moduleName UTF8String], [methodName UTF8String], [args UTF8String]);
+    } else {
+        printf("【EngineScope】scope 已销毁 _contextId=%d  \n", _contextId);
+    }
+    scope = NULL;
+}
+
 // 对象被销毁
 -(void)dealloc {
     printf("【EngineScope】 dealloc _contextId=%d \n", _contextId);

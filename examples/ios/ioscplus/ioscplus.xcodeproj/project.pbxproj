@@ -17,6 +17,12 @@
 		E40438BE2655275A00AFFAAB /* bridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = E40438BD2655275A00AFFAAB /* bridge.mm */; };
 		E40438C1265C983100AFFAAB /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = E40438C0265C983000AFFAAB /* main.js */; };
 		E40438E4265C9FD200AFFAAB /* EngineScope.mm in Sources */ = {isa = PBXBuildFile; fileRef = E40438E3265C9FD200AFFAAB /* EngineScope.mm */; };
+		E46E7BCA26BAC80B0051A5BD /* OCSwiftEngineProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46E7BC926BAC80B0051A5BD /* OCSwiftEngineProxy.swift */; };
+		E46E7BCC26BB8E470051A5BD /* JSEngineScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46E7BCB26BB8E470051A5BD /* JSEngineScope.swift */; };
+		E46E7BCE26BB965D0051A5BD /* NativeModuleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46E7BCD26BB965D0051A5BD /* NativeModuleManager.swift */; };
+		E46E7BD026BB967B0051A5BD /* NativeModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46E7BCF26BB967B0051A5BD /* NativeModule.swift */; };
+		E46E7BD226BB9A530051A5BD /* JSTimerModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46E7BD126BB9A530051A5BD /* JSTimerModule.swift */; };
+		E46E7BD426BBC53A0051A5BD /* JSTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46E7BD326BBC53A0051A5BD /* JSTimer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -48,6 +54,12 @@
 		E40438C0265C983000AFFAAB /* main.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = main.js; sourceTree = "<group>"; };
 		E40438C4265C9CAF00AFFAAB /* EngineScope.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EngineScope.h; sourceTree = "<group>"; };
 		E40438E3265C9FD200AFFAAB /* EngineScope.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EngineScope.mm; sourceTree = "<group>"; };
+		E46E7BC926BAC80B0051A5BD /* OCSwiftEngineProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCSwiftEngineProxy.swift; sourceTree = "<group>"; };
+		E46E7BCB26BB8E470051A5BD /* JSEngineScope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSEngineScope.swift; sourceTree = "<group>"; };
+		E46E7BCD26BB965D0051A5BD /* NativeModuleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeModuleManager.swift; sourceTree = "<group>"; };
+		E46E7BCF26BB967B0051A5BD /* NativeModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeModule.swift; sourceTree = "<group>"; };
+		E46E7BD126BB9A530051A5BD /* JSTimerModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSTimerModule.swift; sourceTree = "<group>"; };
+		E46E7BD326BBC53A0051A5BD /* JSTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSTimer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +107,12 @@
 				E40438BF2655276700AFFAAB /* bridge.h */,
 				E40438C4265C9CAF00AFFAAB /* EngineScope.h */,
 				E40438E3265C9FD200AFFAAB /* EngineScope.mm */,
+				E46E7BC926BAC80B0051A5BD /* OCSwiftEngineProxy.swift */,
+				E46E7BCB26BB8E470051A5BD /* JSEngineScope.swift */,
+				E46E7BCD26BB965D0051A5BD /* NativeModuleManager.swift */,
+				E46E7BCF26BB967B0051A5BD /* NativeModule.swift */,
+				E46E7BD126BB9A530051A5BD /* JSTimerModule.swift */,
+				E46E7BD326BBC53A0051A5BD /* JSTimer.swift */,
 			);
 			path = ioscplus;
 			sourceTree = "<group>";
@@ -178,6 +196,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E46E7BD426BBC53A0051A5BD /* JSTimer.swift in Sources */,
+				E46E7BD226BB9A530051A5BD /* JSTimerModule.swift in Sources */,
+				E46E7BCA26BAC80B0051A5BD /* OCSwiftEngineProxy.swift in Sources */,
+				E46E7BCE26BB965D0051A5BD /* NativeModuleManager.swift in Sources */,
+				E46E7BD026BB967B0051A5BD /* NativeModule.swift in Sources */,
+				E46E7BCC26BB8E470051A5BD /* JSEngineScope.swift in Sources */,
 				E40438E4265C9FD200AFFAAB /* EngineScope.mm in Sources */,
 				E40438BE2655275A00AFFAAB /* bridge.mm in Sources */,
 				E4043863265509F200AFFAAB /* ViewController.swift in Sources */,

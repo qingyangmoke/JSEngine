@@ -6,10 +6,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #include <iostream>
 #import "bridge.h"
 #import "EngineScope.h"
-
+// oc 中调用swift 要引入此文件 {Product Module Name}-Swift.h
+#import "ioscplus-Swift.h"
 // 一定对mm文件中定义
 #import <jsengine_bridge/jsengine_bridge.h>
 
@@ -19,11 +21,7 @@
 + (void)initBridge {
     if(!JSEngineNS::EngineNativeMethods::instance()->invokeModulePointer) {
         JSEngineNS::EngineNativeMethods::instance()->invokeModulePointer = ^const char *(int contextId, int callId, const char *moduleName, const char *methodName, const char *args) {
-            // 需要在这里实现module对应的处理类
-            printf("【MyBridge】moduleName=%s,methodName=%s, args=%s \n",  moduleName, methodName, args);
-            NSString *str = [[NSString alloc] initWithFormat: @"{\"moduleName\": \"%@\", \"methodName\": \"%@\"}", [NSString stringWithUTF8String: moduleName], [NSString stringWithUTF8String: methodName]];
-            // 处理完毕通过事件回调给值
-            JSEngineNS::EngineNativeMethods::instance()->invokeModuleEvent(contextId, callId, 0, [str UTF8String]);
+            [OCSwiftEngineProxy invokeModuleWithContextId:contextId callId: callId moduleName:[NSString stringWithUTF8String:moduleName] methodName:[NSString stringWithUTF8String: methodName] args: [NSString stringWithUTF8String: args]];
             return "success";
         };
     }
@@ -36,34 +34,41 @@
     }
 }
 
-+ (EngineScope *)createScope:(int) contextId {
-    EngineScope *scope = [[EngineScope alloc] initWithContextId:contextId];
-    return scope;
++ (int)invokeModuleEvent:(int) contextId widthCallId: (int) callId withErrorCode:(int) errorCode withResult: (NSString *)result {
+    JSEngineNS::EngineNativeMethods::instance()->invokeModuleEvent(contextId, callId, errorCode, [result UTF8String]);
+    return 0;
 }
 
-+ (int)flushBridgeTask {
-    return flushBridgeTask();
+//+ (EngineScope *)createScope:(int) contextId {
+//    EngineScope *scope = [[EngineScope alloc] initWithContextId:contextId];
+//    return scope;
+//}
+
++ (void)createScope:(int) contextId {
+    JSEngineNS::Engine::instance()->createScope(contextId);
+}
++ (void)evaluateJavaScript:(int) contextId widthSourceCode: (NSString *) sourceCode widthSourceURL: (NSString *) sourceURL widthStartLine: (int) startLine {
+    JSEngineNS::EngineScope* scope = JSEngineNS::Engine::instance()->getScope(contextId);
+    if(scope != NULL) {
+        scope->evaluateJavaScript([sourceCode UTF8String], [sourceURL UTF8String], startLine);
+    } else {
+        printf("【EngineScope】scope 已销毁 _contextId=%d  \n", contextId);
+    }
+    scope = NULL;
 }
 
-// 测试传递字符串
-+ (int)printCPlusString:(NSString *) str {
-    JSEngineNS::Student *student = new JSEngineNS::Student([@"hello" UTF8String], 10);
-    student->say();
-    delete student;
-    return printString([str UTF8String]);
++ (void)invokeJSModule:(int) contextId withModuleName: (NSString *) moduleName widthMethodName: (NSString *) methodName widthArgs: (NSString *) args {
+    JSEngineNS::EngineScope* scope = JSEngineNS::Engine::instance()->getScope(contextId);
+    if(scope != NULL) {
+        scope->invokeJSModule([moduleName UTF8String], [methodName UTF8String], [args UTF8String]);
+    } else {
+        printf("【EngineScope】scope 已销毁 _contextId=%d  \n", contextId);
+    }
+    scope = NULL;
 }
 
-// 测试传递结构体
-+ (int)testStruct:(NSString *) str widthLength: (int) length {
-    NativeString *ns = new NativeString();
-    ns->string = [str UTF8String];
-    ns->length = length;
-    return testStruct(ns);
-}
-
-// 测试传递回调函数+target指针
-+ (void)testCallback: (NSString *) str widthCallBack: (void(*)(const char* result, void* target)) resultCallback withTarget: (void*) target {
-    testCallback([str UTF8String], resultCallback, target);
++ (void)removeScope:(int) contextId {
+    JSEngineNS::Engine::instance()->removeScope(contextId);
 }
 
 + (int)engineTest {

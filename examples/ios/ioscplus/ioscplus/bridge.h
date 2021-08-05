@@ -13,12 +13,13 @@
 
 @interface MyBridge : NSObject
 + (void)initBridge;
-+ (int)flushBridgeTask;
-+ (EngineScope *)createScope:(int) contextId;
+//+ (EngineScope *)createScope:(int) contextId;
++ (void)createScope:(int) contextId;
++ (void)removeScope:(int) contextId;
++ (int)invokeModuleEvent:(int) contextId widthCallId: (int) callId withErrorCode:(int) errorCode withResult: (NSString *)result;
++ (void)evaluateJavaScript:(int) contextId widthSourceCode: (NSString *) sourceCode widthSourceURL: (NSString *) sourceURL widthStartLine: (int) startLine;
++ (void)invokeJSModule:(int) contextId withModuleName: (NSString *) moduleName widthMethodName: (NSString *) methodName widthArgs: (NSString *) args;
 + (int)engineTest;
-+ (int)printCPlusString:(NSString *) str;
-+ (int)testStruct:(NSString *) str widthLength: (int) length;
-+ (void)testCallback:(NSString *) str widthCallBack: (void(*)(const char* result, void* target)) resultCallback withTarget: (void*) target;
 @end
 
 #endif /* bridge_h */

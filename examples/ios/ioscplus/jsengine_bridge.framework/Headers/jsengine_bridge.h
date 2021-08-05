@@ -37,6 +37,7 @@ typedef void *PTR_OBJECT;
 
 namespace JSEngineNS
 {
+  typedef std::function<void(void)> TimerCallback;
   typedef std::function<void(int, const char *)> EngineInvokeModuleCallback;
   typedef std::function<void(int, const char *, const char *)> EngineNativeMethodLog;
   typedef std::function<const char*(int, int, const char *, const char *, const char *)> EngineNativeMethodInvokeModule;
@@ -68,7 +69,7 @@ namespace JSEngineNS
     virtual ~EngineContext(); // 析构函数要定义成虚函数 否则在释放的时候子类析构函数不会被调用 定义成虚函数后 子类析构函数会被先调用
     int getContextId();
     virtual bool evaluateJavaScript(const char *sourceCode, const char *sourceURL, int startLine);
-
+    virtual void invokeJSModule(const char *moduleName, const char *methodName, const char *args);
   protected:
     int _contextId;
   };
@@ -79,6 +80,7 @@ namespace JSEngineNS
     EngineScope(int contextId);
     int getContextId();
     bool evaluateJavaScript(const char *sourceCode, const char *sourceURL, int startLine);
+    void invokeJSModule(const char *moduleName, const char *methodName, const char *args);
     ~EngineScope();
 
   private:
