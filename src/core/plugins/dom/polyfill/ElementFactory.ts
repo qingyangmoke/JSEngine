@@ -4,25 +4,26 @@ import Element from './Element';
 import Node from './Node';
 import ImageElement from './ImageElement';
 import Canvas from './canvas/Canvas';
+import ScrollerElement from './ScrollerElement';
 
 class ElementFactory {
-    _map: Map<string, Element>;
-
+    _typeMap: Map<string, Element>;
     constructor() {
-        this._map = new Map();
-        this.registerElement(DivElement.TAG, DivElement);
-        this.registerElement(ImageElement.TAG, ImageElement);
-        this.registerElement(Canvas.TAG, Canvas);
+        this._typeMap = new Map();
+        this.registerElementType(DivElement.TAG, DivElement);
+        this.registerElementType(ImageElement.TAG, ImageElement);
+        this.registerElementType(Canvas.TAG, Canvas);
+        this.registerElementType(ScrollerElement.TAG, ScrollerElement);
     }
 
-    registerElement(tagName: string, type: any) {
-        this._map.set(tagName, type);
+    registerElementType(tagName: string, type: any) {
+        this._typeMap.set(tagName, type);
     }
 
     createElement(tagName: string): Element {
-        if (this._map.has(tagName)) {
-            const Element = this._map.get(tagName) as any;
-            return new Element(tagName);
+        if (this._typeMap.has(tagName)) {
+            const Element = this._typeMap.get(tagName) as any;
+            return new Element();
         }
         return new ContainerElement(tagName, Node.ELEMENT_NODE);
     }

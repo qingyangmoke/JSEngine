@@ -1,6 +1,5 @@
-package com.jnibridge.modules.dom;
+package com.jnibridge.modules.dom.yoga;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -8,14 +7,11 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.graphics.fonts.Font;
 import android.text.TextPaint;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -23,6 +19,9 @@ import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
 
+import com.facebook.yoga.YogaNode;
+import com.jnibridge.EngineScope;
+import com.jnibridge.JSEngine;
 import com.song.ioscplus.R;
 
 import org.json.JSONArray;
@@ -31,7 +30,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class CanvasRenderingContext2D extends SurfaceView implements SurfaceHolder.Callback, Runnable {
     private static HashMap<String, Typeface> sTypefaceCache = new HashMap<>();
@@ -52,6 +50,14 @@ public class CanvasRenderingContext2D extends SurfaceView implements SurfaceHold
         public boolean italic = false;
         public boolean oblique = false;
         public boolean smallCaps = false;
+        public void copy(FontObject target) {
+            name = target.name;
+            size = target.size;
+            bold = target.bold;
+            italic = target.italic;
+            oblique = target.oblique;
+            smallCaps = target.smallCaps;
+        }
     }
 
     private class StyleColor {
@@ -60,12 +66,34 @@ public class CanvasRenderingContext2D extends SurfaceView implements SurfaceHold
         public int b = 0;
         public int a = 255;
 
+        StyleColor() {
+        }
+
         StyleColor(int r, int g, int b, int a) {
             r = r;
             g = g;
             b = b;
             a = a;
         }
+
+        public void copy(StyleColor target) {
+            r = target.r;
+            g = target.g;
+            b = target.b;
+            a = target.a;
+        }
+    }
+
+    private class SaveState {
+        public StyleColor fillColor;
+        public StyleColor strokeColor;
+        public FontObject fontObject;
+        public Paint strokePaint;
+        public Paint fillPaint;
+        public boolean antiAlias;
+        public float lineWidth;
+        public String lineCap;
+        public String lineJoin;
     }
 
     private SurfaceHolder mSurfaceHolder;
@@ -104,8 +132,13 @@ public class CanvasRenderingContext2D extends SurfaceView implements SurfaceHold
     private Paint mBitmapPaint;
 
     private ArrayList<JSONArray> _commandCache = new ArrayList<>();
-    public CanvasRenderingContext2D(CanvasElement canvas) {
+    private CanvasYogaUINode _canvas;
+
+    private SaveState _saveState;
+    public CanvasRenderingContext2D(CanvasYogaUINode canvas) {
         super(canvas.getViewContext());
+        _canvas= canvas;
+
         mIsDrawing = false;
 
         clearPaint = new Paint();
@@ -129,6 +162,14 @@ public class CanvasRenderingContext2D extends SurfaceView implements SurfaceHold
 
         mFont = new FontObject();
         initView();
+    }
+
+    public YogaNode getYogaNode() {
+        return _canvas.getYogaNode();
+    }
+
+    public EngineScope getScope() {
+        return _canvas.getScope();
     }
 
     /**
@@ -156,11 +197,13 @@ public class CanvasRenderingContext2D extends SurfaceView implements SurfaceHold
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
+        Log.d("JSEngine", "canvas onSizeChanged");
     }
 
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
-
+        Log.d("JSEngine", "canvas surfaceChanged");
+        _canvas.fireUIEvent("surfaceChanged");
     }
 
     @Override
@@ -184,7 +227,7 @@ public class CanvasRenderingContext2D extends SurfaceView implements SurfaceHold
             //获得canvas对象
             mCanvas = mSurfaceHolder.lockCanvas();
             //绘制背景
-            mCanvas.drawColor(Color.BLUE);
+            mCanvas.drawColor(Color.TRANSPARENT);
         } catch (Exception e) {
 
         }
@@ -253,6 +296,7 @@ public class CanvasRenderingContext2D extends SurfaceView implements SurfaceHold
     }
 
     public void setLineWidth(float lineWidth) {
+        JSEngine.log(getScope().getContextId(), "JSEngine", "setLineWidth=" + String.valueOf(lineWidth) + "," + String.valueOf(YogaStyleHelper.rpxRatio));
         mLineWidth = lineWidth;
         strokePaint.setStrokeWidth(mLineWidth);
     }
@@ -322,10 +366,33 @@ public class CanvasRenderingContext2D extends SurfaceView implements SurfaceHold
 
     public void save() {
         mCanvas.save();
+        // save others config
+        if(_saveState == null) {
+            _saveState = new SaveState();
+            _saveState.fillColor = new StyleColor();
+            _saveState.strokeColor = new StyleColor();
+            _saveState.fontObject = new FontObject();
+        }
+        _saveState.fontObject.copy(mFont);
+        _saveState.fillColor.copy(mFillColor);
+        _saveState.strokeColor.copy(mStrokeColor);
+        _saveState.lineCap = mLineCap;
+        _saveState.lineJoin = mLineJoin;
+        _saveState.lineWidth = mLineWidth;
+        _saveState.antiAlias = mAntiAlias;
     }
 
     public void restore() {
         mCanvas.restore();
+        if(_saveState != null) {
+            setFont(_saveState.fontObject.name, _saveState.fontObject.size, _saveState.fontObject.bold, _saveState.fontObject.italic, _saveState.fontObject.oblique, _saveState.fontObject.smallCaps);
+            setStrokeStyle(_saveState.strokeColor.r,_saveState.strokeColor.g, _saveState.strokeColor.b,_saveState.strokeColor.a);
+            setFillStyle(_saveState.fillColor.r,_saveState.fillColor.g, _saveState.fillColor.b,_saveState.fillColor.a);
+            setLineCap(_saveState.lineCap);
+            setLineWidth(_saveState.lineWidth);
+            setLineJoin(_saveState.lineJoin);
+            setAntiAlias(_saveState.antiAlias);
+        }
     }
 
     public void scale(float x, float y) {
@@ -392,7 +459,7 @@ public class CanvasRenderingContext2D extends SurfaceView implements SurfaceHold
     }
 
     public void clearRect(float x, float y, float w, float h) {
-        mCanvas.drawRect(x, y, w, h, clearPaint);
+        mCanvas.drawRect(x, y, x + w, y + h, clearPaint);
         if (mBitmap != null) {
             int clearSize = (int) (w * h);
             int[] clearColor = new int[clearSize];
@@ -413,11 +480,12 @@ public class CanvasRenderingContext2D extends SurfaceView implements SurfaceHold
     }
 
     public void fillRect(float x, float y, float w, float h) {
-        mCanvas.drawRect(x, y, w, h, fillPaint);
+        mCanvas.drawRect(x, y, x + w, y + h, fillPaint);
     }
 
     public void strokeRect(float x, float y, float w, float h) {
-        mCanvas.drawRect(x, y, w, h, strokePaint);
+        JSEngine.log(getScope().getContextId(), "JSEngine", "strokeRect=" + String.valueOf(x) + "," + String.valueOf(y)+ "," + String.valueOf(w)+ "," + String.valueOf(h));
+        mCanvas.drawRect(x, y, x + w, y + h, strokePaint);
     }
 
     public void beginPath() {
@@ -494,6 +562,16 @@ public class CanvasRenderingContext2D extends SurfaceView implements SurfaceHold
 
     public void drawImage(Bitmap bitmap, float x, float y) {
         mCanvas.drawBitmap(bitmap, x, y, mBitmapPaint);
+    }
+
+    public void arc(float x, float y, float radius, float startAngle, float endAngle, boolean counterclockwise) {
+        float sweepAngle = ((endAngle - startAngle) + 360 % 360);
+//        Log.d("JSEngine", "canvas arc: startAngle=" + String.valueOf(startAngle) + ",endAngle=" + String.valueOf(endAngle) + "，sweepAngle=" + String.valueOf(sweepAngle));
+        if(counterclockwise) {
+            sweepAngle = sweepAngle - 360;
+        }
+//        Log.d("JSEngine", "canvas arc: startAngle=" + String.valueOf(startAngle) + ",endAngle=" + String.valueOf(endAngle) + "，sweepAngle=" + String.valueOf(sweepAngle));
+        mLinePath.addArc(x - radius, y - radius, x + radius, y + radius, startAngle, sweepAngle);
     }
 
     private void setTextScaleX(TextPaint textPaint, String text, float maxWidth) {
@@ -585,6 +663,22 @@ public class CanvasRenderingContext2D extends SurfaceView implements SurfaceHold
 //        mCanvas.setBitmap(mBitmap);
 //    }
 
+    public float getDisplayUnit(String cssValue) {
+        return YogaStyleHelper.getDisplayUnit(cssValue);
+    }
+
+    public float getDisplayUnit(int cssValue) {
+        return getDisplayUnit((float) cssValue);
+    }
+
+    public float getDisplayUnit(double cssValue) {
+        return getDisplayUnit((float) cssValue);
+    }
+
+    public float getDisplayUnit(float cssValue) {
+        return YogaStyleHelper.getDisplayUnit(cssValue);
+    }
+
     public void batchCommand(JSONArray commands) {
         if(!this.isReady()) {
             _commandCache.add(commands);
@@ -611,28 +705,29 @@ public class CanvasRenderingContext2D extends SurfaceView implements SurfaceHold
                         context.scale((float)commandArgs.getDouble("x"), (float) commandArgs.getDouble("y"));
                         break;
                     case "rotate":
-                        context.rotate((float) commandArgs.getDouble("angle"));
+                        float rotate = (float) YogaStyleHelper.toDegrees(commandArgs.getDouble("angle"));
+                        context.rotate(rotate);
                         break;
                     case "translate":
-                        context.translate((float) commandArgs.getDouble("x"), (float) commandArgs.getDouble("y"));
+                        context.translate(getDisplayUnit(commandArgs.getDouble("x")), getDisplayUnit(commandArgs.getDouble("y")));
                         break;
                     case "transform":
-                        context.transform((float) commandArgs.getDouble("a"), (float) commandArgs.getDouble("b"), (float) commandArgs.getDouble("c"), (float) commandArgs.getDouble("d"), (float) commandArgs.getDouble("e"), (float) commandArgs.getDouble("f"));
+                        context.transform(getDisplayUnit(commandArgs.getDouble("a")), getDisplayUnit(commandArgs.getDouble("b")), getDisplayUnit(commandArgs.getDouble("c")),getDisplayUnit(commandArgs.getDouble("d")), getDisplayUnit(commandArgs.getDouble("e")), getDisplayUnit(commandArgs.getDouble("f")));
                         break;
                     case "setTransform":
-                        context.setTransform((float) commandArgs.getDouble("a"), (float) commandArgs.getDouble("b"), (float) commandArgs.getDouble("c"), (float) commandArgs.getDouble("d"), (float) commandArgs.getDouble("e"), (float) commandArgs.getDouble("f"));
+                        context.setTransform(getDisplayUnit(commandArgs.getDouble("a")), getDisplayUnit(commandArgs.getDouble("b")), getDisplayUnit(commandArgs.getDouble("c")),getDisplayUnit(commandArgs.getDouble("d")), getDisplayUnit(commandArgs.getDouble("e")), getDisplayUnit(commandArgs.getDouble("f")));
                         break;
                     case "rect":
-                        context.rect((float)commandArgs.getDouble("x"), (float) commandArgs.getDouble("y"), (float) commandArgs.getDouble("w"), (float) commandArgs.getDouble("h"));
+                        context.rect(getDisplayUnit(commandArgs.getDouble("x")), getDisplayUnit(commandArgs.getDouble("y")), getDisplayUnit(commandArgs.getDouble("w")),getDisplayUnit(commandArgs.getDouble("h")));
                         break;
                     case "clearRect":
-                        context.clearRect((float)commandArgs.getDouble("x"), (float) commandArgs.getDouble("y"), (float) commandArgs.getDouble("w"), (float) commandArgs.getDouble("h"));
+                        context.clearRect(getDisplayUnit(commandArgs.getDouble("x")), getDisplayUnit(commandArgs.getDouble("y")), getDisplayUnit(commandArgs.getDouble("w")),getDisplayUnit(commandArgs.getDouble("h")));
                         break;
                     case "fillRect":
-                        context.fillRect((float)commandArgs.getDouble("x"), (float) commandArgs.getDouble("y"), (float) commandArgs.getDouble("w"), (float) commandArgs.getDouble("h"));
+                        context.fillRect(getDisplayUnit(commandArgs.getDouble("x")), getDisplayUnit(commandArgs.getDouble("y")), getDisplayUnit(commandArgs.getDouble("w")),getDisplayUnit(commandArgs.getDouble("h")));
                         break;
                     case "strokeRect":
-                        context.strokeRect((float)commandArgs.getDouble("x"), (float) commandArgs.getDouble("y"), (float) commandArgs.getDouble("w"), (float) commandArgs.getDouble("h"));
+                        context.strokeRect(getDisplayUnit(commandArgs.getDouble("x")), getDisplayUnit(commandArgs.getDouble("y")), getDisplayUnit(commandArgs.getDouble("w")),getDisplayUnit(commandArgs.getDouble("h")));
                         break;
                     case "beginPath":
                         context.beginPath();
@@ -650,22 +745,22 @@ public class CanvasRenderingContext2D extends SurfaceView implements SurfaceHold
                         context.clip();
                         break;
                     case "moveTo":
-                        context.moveTo((float) commandArgs.getDouble("x"), (float) commandArgs.getDouble("y"));
+                        context.moveTo(getDisplayUnit(commandArgs.getDouble("x")), getDisplayUnit(commandArgs.getDouble("y")));
                         break;
                     case "lineTo":
-                        context.lineTo((float) commandArgs.getDouble("x"), (float) commandArgs.getDouble("y"));
+                        context.lineTo(getDisplayUnit(commandArgs.getDouble("x")),getDisplayUnit(commandArgs.getDouble("y")));
                         break;
                     case "quadraticCurveTo":
-                        context.quadraticCurveTo((float) commandArgs.getDouble("cpx"), (float) commandArgs.getDouble("cpy"), (float) commandArgs.getDouble("x"), (float) commandArgs.getDouble("y"));
+                        context.quadraticCurveTo(getDisplayUnit(commandArgs.getDouble("cpx")), getDisplayUnit(commandArgs.getDouble("cpy")), getDisplayUnit(commandArgs.getDouble("x")), getDisplayUnit(commandArgs.getDouble("y")));
                         break;
                     case "bezierCurveTo":
-                        context.bezierCurveTo((float) commandArgs.getDouble("cp1x"), (float) commandArgs.getDouble("cp1y"), (float) commandArgs.getDouble("cp2x"), (float) commandArgs.getDouble("cp2y"), (float) commandArgs.getDouble("x"), (float) commandArgs.getDouble("y"));
+                        context.bezierCurveTo(getDisplayUnit(commandArgs.getDouble("cp1x")), getDisplayUnit(commandArgs.getDouble("cp1y")), getDisplayUnit(commandArgs.getDouble("cp2x")), getDisplayUnit(commandArgs.getDouble("cp2y")), getDisplayUnit(commandArgs.getDouble("x")), getDisplayUnit(commandArgs.getDouble("y")));
                         break;
                     case "fillText":
-                        context.fillText(commandArgs.getString("text"), (float) commandArgs.getDouble("x"), (float) commandArgs.getDouble("y"), (float) commandArgs.getDouble("maxWidth"));
+                        context.fillText(commandArgs.getString("text"), getDisplayUnit(commandArgs.getDouble("x")), getDisplayUnit(commandArgs.getDouble("y")), getDisplayUnit( commandArgs.getDouble("maxWidth")));
                         break;
                     case "strokeText":
-                        context.strokeText(commandArgs.getString("text"), (float) commandArgs.getDouble("x"), (float) commandArgs.getDouble("y"), (float) commandArgs.getDouble("maxWidth"));
+                        context.strokeText(commandArgs.getString("text"), getDisplayUnit(commandArgs.getDouble("x")), getDisplayUnit(commandArgs.getDouble("y")), getDisplayUnit(commandArgs.getDouble("maxWidth")));
                         break;
                     case "lineDash":
                         commandArgs.getJSONArray("lineDash");
@@ -675,7 +770,8 @@ public class CanvasRenderingContext2D extends SurfaceView implements SurfaceHold
                         context.setAntiAlias(antiAlias);
                         break;
                     case "lineWidth":
-                        context.setLineWidth((float)commandArgs.getDouble("value"));
+                        float lineWidth = getDisplayUnit(commandArgs.getDouble("value"));
+                        context.setLineWidth(lineWidth);
                         break;
                     case "lineCap":
                         context.setLineCap(commandArgs.getString("value"));
@@ -695,15 +791,24 @@ public class CanvasRenderingContext2D extends SurfaceView implements SurfaceHold
                     case "strokeStyle":
                         context.setStrokeStyle(commandArgs.getInt("r"),commandArgs.getInt("g"),commandArgs.getInt("b"),commandArgs.getInt("a"));
                         break;
+                    case "arc":
+                        context.arc(getDisplayUnit(commandArgs.getDouble("x")),getDisplayUnit(commandArgs.getDouble("y")), getDisplayUnit(commandArgs.getDouble("radius")),(float)YogaStyleHelper.toDegrees(commandArgs.getDouble("startAngle")), (float) YogaStyleHelper.toDegrees(commandArgs.getDouble("endAngle")), commandArgs.getInt("counterclockwise") == 1);
+                        break;
                     case "drawImage":
                         int textureId = commandArgs.getInt("textureId");
-                        JSONArray drawImageArgs = commandArgs.getJSONArray("params");
-                        if (drawImageArgs.length() == 2) {
-                            context.drawImage(null, drawImageArgs.getInt(0), drawImageArgs.getInt(1));
-                        } else if (drawImageArgs.length() == 4) {
-                            context.drawImage(null, drawImageArgs.getInt(0), drawImageArgs.getInt(1), drawImageArgs.getInt(2), drawImageArgs.getInt(3));
-                        }else if (drawImageArgs.length() == 8) {
-                            context.drawImage(null, drawImageArgs.getInt(0), drawImageArgs.getInt(1), drawImageArgs.getInt(2), drawImageArgs.getInt(3), drawImageArgs.getInt(4), drawImageArgs.getInt(5), drawImageArgs.getInt(6), drawImageArgs.getInt(7));
+                        ImageYogaUINode imageYogaUINode = (ImageYogaUINode)_canvas.getScope().getUIRender().getElement(textureId);
+                        if(imageYogaUINode != null) {
+                            Bitmap imageSource = imageYogaUINode.getImageSource();
+                            if(imageSource != null) {
+                                JSONArray drawImageArgs = commandArgs.getJSONArray("params");
+                                if (drawImageArgs.length() == 2) {
+                                    context.drawImage(imageYogaUINode.getImageSource(), (int)getDisplayUnit(drawImageArgs.getInt(0)),(int)getDisplayUnit(drawImageArgs.getInt(1)), (int)getDisplayUnit(imageYogaUINode.getYogaNode().getWidth().value), (int)getDisplayUnit(imageYogaUINode.getYogaNode().getHeight().value));
+                                } else if (drawImageArgs.length() == 4) {
+                                    context.drawImage(imageYogaUINode.getImageSource(), (int)getDisplayUnit(drawImageArgs.getInt(0)), (int)getDisplayUnit(drawImageArgs.getInt(1)), (int)getDisplayUnit(drawImageArgs.getInt(2)), (int)getDisplayUnit(drawImageArgs.getInt(3)));
+                                } else if (drawImageArgs.length() == 8) {
+                                    context.drawImage(imageYogaUINode.getImageSource(), (int)getDisplayUnit(drawImageArgs.getInt(0)), (int)getDisplayUnit(drawImageArgs.getInt(1)), (int)getDisplayUnit(drawImageArgs.getInt(2)), (int)getDisplayUnit(drawImageArgs.getInt(3)), (int)getDisplayUnit(drawImageArgs.getInt(4)), (int)getDisplayUnit(drawImageArgs.getInt(5)), (int)getDisplayUnit(drawImageArgs.getInt(6)), (int)getDisplayUnit(drawImageArgs.getInt(7)));
+                                }
+                            }
                         }
                         break;
                 }

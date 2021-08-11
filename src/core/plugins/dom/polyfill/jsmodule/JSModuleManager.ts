@@ -1,12 +1,14 @@
 import JSModule from './JSModule';
 import TimerJSModule from './TimerJSModule';
 import { defineGlobalProperty } from '../Utils';
+import UIEventJSModule from './UIEventJSModule';
 
 class JSModuleManager {
     _moduleMap: Map<string, JSModule>;
     constructor() {
         this._moduleMap = new Map();
         this.registerJSModule(new TimerJSModule());
+        this.registerJSModule(new UIEventJSModule());
     }
 
     registerJSModule(module: JSModule) {

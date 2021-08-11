@@ -1,7 +1,5 @@
 package com.jnibridge;
 
-import android.util.Log;
-
 import com.jnibridge.modules.EmptyModule;
 import com.jnibridge.modules.ModuleBase;
 import com.jnibridge.modules.Navigation;

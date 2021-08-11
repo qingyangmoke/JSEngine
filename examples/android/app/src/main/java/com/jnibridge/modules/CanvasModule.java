@@ -1,11 +1,9 @@
 package com.jnibridge.modules;
 
-import android.graphics.Color;
-import android.graphics.Rect;
 import android.util.Log;
 import com.jnibridge.EngineScope;
-import com.jnibridge.modules.dom.CanvasElement;
-import com.jnibridge.modules.dom.CanvasRenderingContext2D;
+import com.jnibridge.modules.dom.yoga.CanvasYogaUINode;
+import com.jnibridge.modules.dom.yoga.CanvasRenderingContext2D;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,8 +14,8 @@ public class CanvasModule extends ModuleBase {
     super("canvas", scope);
   }
 
-  public CanvasElement getCanvas(int uniqueId) {
-    return (CanvasElement) getScope().getElementFactory().getElement(uniqueId);
+  public CanvasYogaUINode getCanvas(int uniqueId) {
+    return (CanvasYogaUINode) getScope().getUIRender().getElement(uniqueId);
   }
 
   @EngineMethod(name = "batchCmd")
@@ -25,7 +23,7 @@ public class CanvasModule extends ModuleBase {
     try {
       JSONObject json = new JSONObject(args);
       int uniqueId = json.getInt("uniqueId");
-      CanvasElement canvas = getCanvas(uniqueId);
+      CanvasYogaUINode canvas = getCanvas(uniqueId);
       CanvasRenderingContext2D context = canvas.getRenderingContext();
       JSONArray commands = json.getJSONArray("commands");
       Log.d(
@@ -49,7 +47,7 @@ public class CanvasModule extends ModuleBase {
       JSONObject json = new JSONObject(args);
       int uniqueId = json.getInt("uniqueId");
       String text = json.getString("text");
-      CanvasElement canvas = getCanvas(uniqueId);
+      CanvasYogaUINode canvas = getCanvas(uniqueId);
       float width = canvas.getRenderingContext().measureText(text);
       jsonObject.put("width", width);
     } catch (JSONException jsonException) {
@@ -65,7 +63,7 @@ public class CanvasModule extends ModuleBase {
       JSONObject json = new JSONObject(args);
       int uniqueId = json.getInt("uniqueId");
       String type = json.getString("type");
-      CanvasElement canvas = getCanvas(uniqueId);
+      CanvasYogaUINode canvas = getCanvas(uniqueId);
       canvas.createRenderingContext(type);
     } catch (JSONException jsonException) {
       jsonException.printStackTrace();

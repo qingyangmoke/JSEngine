@@ -21,11 +21,12 @@ public class JSEngine {
     public static native int invokeJSModule(int contextId, String moduleName, String methodName, String args);
 
     public static String invokeModule(int contextId, int callId, String moduleName, String methodName, String args) {
-        log(contextId, "info", "contextId="+ contextId +", callId=" + callId + ", moduleName=" + moduleName+", methodName=" + methodName + ", args=" + args);
+        log(contextId, "info", "[android] contextId="+ contextId +", callId=" + callId + ", moduleName=" + moduleName+", methodName=" + methodName + ", args=" + args);
         EngineScope scope = EngineScope.getScope(contextId);
         if(scope != null) {
             return scope.invokeModule(callId, moduleName, methodName, args);
         } else {
+            log(contextId, "error", "[android] scope not init contextId="+ contextId +", callId=" + callId + ", moduleName=" + moduleName+", methodName=" + methodName + ", args=" + args);
             invokeModuleEvent(contextId, callId, 0, "{\"moduleName\": \"" + moduleName + "\", \"methodName\": \"" + methodName + "\"}");
         }
         return "";

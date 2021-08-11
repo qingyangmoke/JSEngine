@@ -3,6 +3,7 @@ import ContainerElement from './ContainerElement';
 import BodyElement from './BodyElement';
 import Node from './Node';
 import ElementFactory from './ElementFactory';
+import UIEvent from './UIEvent';
 class Document extends ContainerElement {
     _body: BodyElement;
     constructor() {
@@ -14,17 +15,25 @@ class Document extends ContainerElement {
     get uniqueId() {
         return 0;
     }
- 
+
     get body(): BodyElement {
         return this._body;
+    }
+
+    get title(): number {
+        return parseFloat(this.getAttribute('title'));
+    }
+
+    set title(value: number | string) {
+        this.setAttribute('title', value);
     }
 
     createElement(tagName: string): Element {
         return ElementFactory.createElement(tagName);
     }
 
-    registerElement(tagName: string, type: any) {
-        ElementFactory.registerElement(tagName, type);
+    registerElementType(tagName: string, type: any) {
+        ElementFactory.registerElementType(tagName, type);
     }
 
     getElementById(id: string) {
@@ -36,6 +45,23 @@ class Document extends ContainerElement {
             }
         });
         return element;
+    }
+
+    dispatchEvent(event: UIEvent): boolean {
+        switch (event.type) {
+            case 'resize':
+                if (event.target === this && event.data) {
+                    const { width, height } = event.data;
+                    // @ts-ignore
+                    window.innerWidth = width;
+                    // @ts-ignore
+                    window.innerHeight = height;
+                    console.log('window.resize', window.innerWidth, window.innerHeight);
+                }
+                break;
+                
+        }
+        return super.dispatchEvent(event);
     }
 }
 export default new Document();

@@ -54,12 +54,19 @@ export default class Style {
                     UICommand.sendCommand(UICommand.SET_STYLE, {
                         uniqueId,
                         style: {
-                            prop: value,
+                            [prop]: value,
                         },
                     });
                 }
                 return true;
             },
+        });
+        UICommand.sendCommand(UICommand.SET_STYLE, {
+            uniqueId,
+            style: {
+                ...style,
+            },
+            replace: 1,
         });
         this._style[PROXY_SYMBOL] = true;
     }

@@ -8,12 +8,9 @@ export default class CanvasCommand {
     static CREATE_CONTEXT_COMMAND = 'createContext';
     _commands: Array<{ command: string; data: any }> = [];
     _canvas: Canvas;
-
+    _renderTimer: any = -1;
     constructor(canvas: Canvas) {
         this._canvas = canvas;
-        // setInterval(() => {
-        //     this.render();
-        // }, 1000 / 60);
     }
 
     pushCommand(command: string, data?: any): any {

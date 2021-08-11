@@ -2,9 +2,13 @@ import ElementAttribute from './ElementAttribute';
 import Node from './Node';
 import Style from './Style';
 import UICommand from './UICommand';
+import UIEvent from './UIEvent';
+import ElementCache from './ElementCache';
+import ContainerElement from './ContainerElement';
 const ID_STRING = 'id';
 const CLASS_STRING = 'className';
 export default class Element extends Node {
+    static _elementsMap: Map<number, Element> = new Map<number, Element>();
     _parent: Element | null;
     _doc: HTMLDocument | null;
     _previousSibling: Element | null;
@@ -14,6 +18,8 @@ export default class Element extends Node {
     _attributes: ElementAttribute;
     _class: string;
     _domId: string;
+
+    _eventListeners: Map<string, Array<any>> = new Map<string, Array<any>>();
     get previousSibling(): Element | null {
         return this._previousSibling;
     }
@@ -50,8 +56,8 @@ export default class Element extends Node {
         this._style.style = value;
     }
 
-    get parentElement(): Node | null {
-        return this.parentNode;
+    get parentElement(): ContainerElement | null {
+        return this.parentNode as ContainerElement;
     }
 
     get tagName() {
@@ -67,7 +73,9 @@ export default class Element extends Node {
     }
 
     get innerHTML(): string {
-        return `<${this.tagName} ${this._attributes.toString()} style="${this._style.toString()}"></${this.tagName}>`;
+        return `<${
+            this.tagName
+        } ${this._attributes.toString()} style="${this._style.toString()}"></${this.tagName}>`;
     }
 
     get ownerDocument(): HTMLDocument | null {
@@ -98,10 +106,27 @@ export default class Element extends Node {
         this.setAttribute(ID_STRING, value);
     }
 
+    get width(): number {
+        return parseFloat(this.getAttribute('width'));
+    }
+
+    set width(value: number | string) {
+        this.setAttribute('width', value);
+    }
+
+    get height(): number {
+        return parseFloat(this.getAttribute('height'));
+    }
+
+    set height(value: number | string) {
+        this.setAttribute('height', value);
+    }
+
     constructor(tagName: string, nodeType: number = Node.ELEMENT_NODE) {
         super(tagName, nodeType);
         this._style = new Style(this);
         this._attributes = new ElementAttribute(this);
+        ElementCache.registerElement(this);
         UICommand.sendCommand(UICommand.CREATE_ELEMENT, {
             uniqueId: this.uniqueId,
             tagName: tagName,
@@ -147,5 +172,56 @@ export default class Element extends Node {
             this[command](args);
         }
         console.log('command=', command, ',args=', args);
+    }
+
+    destroy() {
+        ElementCache.unregisterElement(this);
+    }
+
+    addEventListener(
+        type: string,
+        listener: Function,
+        options?: boolean | AddEventListenerOptions,
+    ): void {
+        if (typeof listener !== 'function') {
+            return;
+        }
+        if (!this._eventListeners.has(type)) {
+            this._eventListeners.set(type, []);
+        }
+        const events = this._eventListeners.get(type);
+        events?.push({
+            listener,
+            options,
+        });
+    }
+
+    dispatchEvent(event: UIEvent): boolean {
+        if (!this._eventListeners.has(event.type)) {
+            return false;
+        }
+        const events = this._eventListeners.get(event.type);
+        if (events) {
+            events.forEach((e) => {
+                e.listener(event);
+            });
+        }
+        return false;
+    }
+
+    removeEventListener(
+        type: string,
+        callback: EventListenerOrEventListenerObject | null,
+        options?: EventListenerOptions | boolean,
+    ): void {
+        if (!this._eventListeners.has(type)) {
+            return;
+        }
+        if (!callback) {
+            this._eventListeners.set(type, []);
+            return;
+        }
+        const events = this._eventListeners.get(type)?.filter((e) => e.listener === callback) || [];
+        this._eventListeners.set(type, events);
     }
 }

@@ -81,7 +81,7 @@ export default class Container extends Element {
                 uniqueId: newChild.uniqueId,
             },
             refChild: {
-                uniqueId: this.lastChild?.uniqueId || '',
+                uniqueId: -1,
             },
         });
         return newChild;
@@ -142,7 +142,7 @@ export default class Container extends Element {
                 uniqueId: newChild.uniqueId,
             },
             refChild: {
-                uniqueId: refChild?.uniqueId || '',
+                uniqueId: refChild?.uniqueId || -1,
             },
         });
         return newChild;
@@ -173,6 +173,7 @@ export default class Container extends Element {
                 uniqueId: oldChild.uniqueId,
             },
         });
+        oldChild.destroy();
         return oldChild;
     }
 

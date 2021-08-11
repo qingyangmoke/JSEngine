@@ -1,38 +1,61 @@
 package com.jnibridge.modules.renders;
 
 import com.jnibridge.EngineScope;
-import com.jnibridge.modules.EngineMethod;
-import com.jnibridge.modules.UIModule;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.jnibridge.modules.dom.IUINode;
 
-public class UIRender {
-    private UIModule _uiModule;
-    public UIRender(UIModule uimodule) {
-      this._uiModule = uimodule;
+import java.util.HashMap;
+
+public abstract class UIRender {
+    private EngineScope _scope;
+    protected IUINode _rootElement;
+    private HashMap<String, IUINode> _tempElements = new HashMap<String, IUINode>();
+    public UIRender(EngineScope scope) {
+        this._scope = scope;
     }
 
-    public void responseToJS(int callId, JSONObject jsonObject) {
-      this._uiModule.invokeMethodCallback(callId, 0,jsonObject);
+    public EngineScope getScope() {
+        return _scope;
     }
 
-    @EngineMethod(name = "refresh")
-    public String refresh(int callId, String args) {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("args", args);
-            jsonObject.put("callId", callId);
-            jsonObject.put("method", "UI.refresh");
-        } catch (JSONException jsonException) {
-            jsonException.printStackTrace();
+    public IUINode getRootElement() {
+        return _rootElement;
+    }
+
+    public void addElement(IUINode element) {
+        _tempElements.put(String.valueOf(element.getUniqueId()), element);
+    }
+
+    public IUINode getElement(int uniqueId) {
+        if(uniqueId == 0) {
+            return getRootElement();
         }
-        this.responseToJS(callId, jsonObject);
-        return "";
+        return getElement(String.valueOf(uniqueId));
     }
 
-    @EngineMethod(name = "createElement")
-    public String createElement(int callId, String args) {
-        return "";
+    public IUINode getElement(String uniqueId) {
+        return _tempElements.get(uniqueId);
     }
+
+    public abstract void createElement(int uniqueId,String tagName);
+
+    public abstract void insertChild(int uniqueId, int newChildId, int refChildId);
+
+    public abstract void appendChild(int uniqueId, int newChildId);
+
+    public abstract void removeChild(int uniqueId, int newChildId);
+
+    public abstract void replaceChild(int uniqueId, int newChildId, int oldChildId);
+
+    public abstract void setAttribute(int uniqueId,String key,String value);
+
+    public abstract String getAttribute(int uniqueId,String key);
+
+    public abstract void removeAttribute(int uniqueId, String key);
+
+    public abstract void setStyle(int uniqueId, String key, String value);
+
+    public abstract void resetStyle(int uniqueId);
+
+    public abstract void scrollTo(int uniqueId, float x, float y);
 }

@@ -6,6 +6,8 @@ class UICommand {
     static CREATE_ELEMENT: string = 'createElement';
     // 新增属性
     static SET_ATTRIBUTE: string = 'setAttribute';
+    // 获取属性
+    static GET_ATTRIBUTE: string = 'getAttribute';
     // 删除属性
     static REMOVE_ATTRIBUTE: string = 'removeAttribute';
     // 添加child
@@ -14,6 +16,8 @@ class UICommand {
     static REMOVE_CHILD: string = 'removeChild';
     // 替换child
     static REPLACE_CHILD: string = 'replaceChild';
+    // 滚动
+    static SCROLL_TO: string = 'scrollTo';
     // TOAST 弱提示
     static TOAST: string = 'toast';
     // alert 强提示

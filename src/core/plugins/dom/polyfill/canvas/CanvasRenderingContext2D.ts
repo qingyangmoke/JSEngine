@@ -37,42 +37,49 @@ class Color {
             if (aColor.length !== 4) {
                 throw new Error('invalid color');
             }
-            this.r = Number(aColor[0]) || 0;
-            this.g = Number(aColor[1]) || 0;
-            this.b = Number(aColor[2]) || 0;
-            this.a =
+            let r = Number(aColor[0]) || 0;
+            let g = Number(aColor[1]) || 0;
+            let b = Number(aColor[2]) || 0;
+            let a =
                 typeof aColor[3] === 'undefined'
                     ? 255
                     : Math.min(255, Math.round(Number(aColor[3]) * 255));
+            this.setRgba(r, g, b, a);       
         } else if (/^(rgb|RGB)/.test(color)) {
             var aColor = color.replace(/(?:\(|\)|rgb|RGB)*/g, '').split(',');
             if (aColor.length !== 3) {
                 throw new Error('invalid color');
             }
-            this.r = Number(aColor[0]) || 0;
-            this.g = Number(aColor[1]) || 0;
-            this.b = Number(aColor[2]) || 0;
-            this.a = 255;
+            let r = Number(aColor[0]) || 0;
+            let g = Number(aColor[1]) || 0;
+            let b = Number(aColor[2]) || 0;
+            let a = 255;
+            this.setRgba(r, g, b, a);
         } else if (color.indexOf('#') === 0) {
+            let r = 0;
+            let g = 0;
+            let b = 0;
+            let a = 255;
             var aNum = color.substring(1).split('');
             if (aNum.length === 8) {
-                this.a = parseInt(`${aNum[0]}${aNum[1]}`, 16);
-                this.r = parseInt(`${aNum[2]}${aNum[3]}`, 16);
-                this.g = parseInt(`${aNum[4]}${aNum[5]}`, 16);
-                this.b = parseInt(`${aNum[6]}${aNum[7]}`, 16);
+                a = parseInt(`${aNum[0]}${aNum[1]}`, 16);
+                r = parseInt(`${aNum[2]}${aNum[3]}`, 16);
+                g = parseInt(`${aNum[4]}${aNum[5]}`, 16);
+                b = parseInt(`${aNum[6]}${aNum[7]}`, 16);
             } else if (aNum.length === 6) {
-                this.r = parseInt(`${aNum[0]}${aNum[1]}`, 16);
-                this.g = parseInt(`${aNum[2]}${aNum[3]}`, 16);
-                this.b = parseInt(`${aNum[4]}${aNum[5]}`, 16);
-                this.a = 255;
+                r = parseInt(`${aNum[0]}${aNum[1]}`, 16);
+                g = parseInt(`${aNum[2]}${aNum[3]}`, 16);
+                b = parseInt(`${aNum[4]}${aNum[5]}`, 16);
+                a = 255;
             } else if (aNum.length === 3) {
-                this.r = parseInt(`${aNum[0]}${aNum[0]}`, 16);
-                this.g = parseInt(`${aNum[1]}${aNum[1]}`, 16);
-                this.b = parseInt(`${aNum[2]}${aNum[2]}`, 16);
-                this.a = 255;
+                r = parseInt(`${aNum[0]}${aNum[0]}`, 16);
+                g = parseInt(`${aNum[1]}${aNum[1]}`, 16);
+                b = parseInt(`${aNum[2]}${aNum[2]}`, 16);
+                a = 255;
             } else {
                 throw new Error('invalid color');
             }
+            this.setRgba(r, g, b, a);
         } else {
             throw new Error('invalid color');
         }
@@ -318,11 +325,11 @@ export default class CanvasRenderingContext2D {
         x: number,
         y: number,
         radius: number,
-        startAngle: number,
-        endAngle: number,
+        startAngle: number = 0,
+        endAngle: number = Math.PI * 2,
         counterclockwise: boolean = false,
     ): void {
-        this.cmd.pushCommand('arc', { x, y, radius, startAngle, endAngle, counterclockwise });
+        this.cmd.pushCommand('arc', { x, y, radius, startAngle, endAngle, counterclockwise: counterclockwise ? 1 : 0 });
     }
     closePath(): void {
         this.cmd.pushCommand('closePath');
@@ -400,7 +407,7 @@ export default class CanvasRenderingContext2D {
         } else {
             throw new Error('参数错误');
         }
-        this.cmd.pushCommand('drawImage', { textureId: 0, params: rest });
+        this.cmd.pushCommand('drawImage', { textureId: image.uniqueId, params: rest });
     }
 
     createLinearGradient(x0: number, y0: number, x1: number, y1: number): CanvasGradient {
