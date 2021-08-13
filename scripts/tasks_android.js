@@ -130,7 +130,7 @@ LOCAL_EXPORT_C_INCLUDES := jni
 include $(PREBUILT_SHARED_LIBRARY)
     
 include $(CLEAR_VARS)
-LOCAL_LDLIBS := -L$(SYSROOT)/usr/lib -llog
+LOCAL_LDLIBS := -L$(SYSROOT)/usr/lib -llog -landroid
 LOCAL_SHARED_LIBRARIES := ${TARGET_NAME}
 LOCAL_MODULE := MyBridgeJNI
 LOCAL_SRC_FILES := MyBridge.cpp

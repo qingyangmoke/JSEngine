@@ -13,6 +13,7 @@ namespace JSEngineNS
     OBJECT_INSTANCE(V8Runtime);
     void Initialize();
     v8::Isolate *getIsolate();
+    v8::Platform *getPlatform();
     v8::Local<v8::String> ConvertToV8String(v8::Isolate *isolate, const char *data, int length);
     v8::Local<v8::String> ConvertToV8String(v8::Isolate *isolate, const std::string &s);
     std::string ConvertToString(const v8::Local<v8::String> &s);

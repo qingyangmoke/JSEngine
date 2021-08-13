@@ -15,7 +15,7 @@ void _logCallback(std::string type, const v8::FunctionCallbackInfo<v8::Value> &i
     // auto isolate = V8Runtime::instance()->getIsolate();
     int argLen = info.Length();
     contextId = V8Runtime::instance()->getContextId(isolate->GetCurrentContext());
-    if (argLen >= 2)
+    if (argLen >= 0)
     {
       std::string message = "";
       for (int i = 0; i < argLen; i++)

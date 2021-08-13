@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         EngineScope scope = EngineScope.createScope(this);
         System.err.println("initEngine.scope.getContextId=" + scope.getContextId());
 
-        scope.loadBundle("scroller.js");
+        scope.loadBundle("promise.js");
 
 //        JSEngine.invokeJSModule(scope.getContextId(), "JSTimers", "sayHi" ,"hello1");
 //

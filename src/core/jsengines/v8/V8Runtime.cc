@@ -26,12 +26,18 @@ void V8Runtime::Initialize()
     v8::Isolate::CreateParams create_params;    
     create_params.array_buffer_allocator = new V8EngineAllocator();
     this->isolate = v8::Isolate::New(create_params);
+    this->isolate->SetMicrotasksPolicy(v8::MicrotasksPolicy::kAuto);
   }
 }
 
 v8::Isolate *V8Runtime::getIsolate()
 {
   return this->isolate;
+}
+
+v8::Platform *V8Runtime::getPlatform()
+{
+  return this->platform;
 }
 
 v8::Local<v8::String> V8Runtime::ConvertToV8String(v8::Isolate *isolate, const char *data, int length)
@@ -41,16 +47,8 @@ v8::Local<v8::String> V8Runtime::ConvertToV8String(v8::Isolate *isolate, const c
 
 v8::Local<v8::String> V8Runtime::ConvertToV8String(v8::Isolate *isolate, const std::string &s)
 {
-  // try
-  // {
-  // // return ConvertToV8String(isolate, s.c_str(), s.length());
   v8::Local<v8::String> str = v8::String::NewFromUtf8(isolate, s.c_str(), v8::NewStringType::kNormal, s.length()).ToLocalChecked();
   return str;
-  // }
-  // catch (...)
-  // {
-  // }
-  // return v8::String::NewFromUtf8(isolate, "hello");
 }
 
 std::string V8Runtime::ConvertToString(const v8::Local<v8::String> &s)

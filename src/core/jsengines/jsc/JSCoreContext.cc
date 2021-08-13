@@ -11,62 +11,10 @@
 using namespace JSEngineNS;
 using namespace JSEngineNS::jsc;
 
-JSValueRef delayCall(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount,
-                     const JSValueRef *arguments, JSValueRef *exception)
-{
-  JSCoreEngineContext *context = static_cast<JSCoreEngineContext *>(JSObjectGetPrivate(JSContextGetGlobalObject(ctx)));
-
-  const JSValueRef &callbackValueRef = arguments[0];
-  const JSValueRef &timeoutValueRef = arguments[1];
-
-  if (!JSValueIsObject(ctx, callbackValueRef))
-  {
-    throwJSError(ctx, "Failed to execute 'setTimeout': parameter 1 (callback) must be a function.", exception);
-    return nullptr;
-  }
-
-  JSObjectRef callbackObjectRef = JSValueToObject(ctx, callbackValueRef, exception);
-
-  if (!JSObjectIsFunction(ctx, callbackObjectRef))
-  {
-    throwJSError(ctx, "Failed to execute 'setTimeout': parameter 1 (callback) must be a function.", exception);
-    return nullptr;
-  }
-
-  int32_t timeout;
-
-  if (argumentCount < 2 || JSValueIsUndefined(ctx, timeoutValueRef))
-  {
-    timeout = 0;
-  }
-  else if (JSValueIsNumber(ctx, timeoutValueRef))
-  {
-    timeout = JSValueToNumber(ctx, timeoutValueRef, exception);
-  }
-  else
-  {
-    throwJSError(ctx, "Failed to execute 'setTimeout': parameter 2 (timeout) only can be a number or undefined.",
-                 exception);
-    return nullptr;
-  }
-
-  JSValueRef args[2];
-  args[0] = JSValueMakeNumber(ctx, 1);
-  args[1] = JSValueMakeNumber(ctx, 2);
-
-  JSObjectCallAsFunction(ctx, callbackObjectRef, thisObject, 2, args, exception);
-
-  std::cout << "delayCall timeout=" << timeout << std::endl;
-
-  int timerId = 1;
-
-  return JSValueMakeNumber(ctx, timerId);
-}
-
 JSCoreEngineContext::JSCoreEngineContext(int contextId) : EngineContext(contextId)
 {
   JSStaticFunction globalFunctions[] = {
-      "delayCall", delayCall, kJSPropertyAttributeNone, {nullptr} // null termination
+      {nullptr} // null termination
   };
 
   JSStaticValue globalValues[] = {
@@ -132,12 +80,26 @@ bool JSCoreEngineContext::evaluateJavaScript(const char *sourceCode, const char 
 
 bool JSCoreEngineContext::handleException(JSValueRef exc)
 {
-  // if (JSC_UNLIKELY(exc))
-  // {
-  //   HANDLE_JSC_EXCEPTION(this->context(), exc, _handler);
-  //   return false;
-  // }
-  return exc == NULL;
+  if (exc == NULL)
+  {
+    return true;
+  }
+  JSObjectRef error = JSValueToObject(this->context(), exc, nullptr);
+  JSStringRef messageKey = JSStringCreateWithUTF8CString("message");
+  JSStringRef stackKey = JSStringCreateWithUTF8CString("stack");
+  JSValueRef messageRef = JSObjectGetProperty(this->context(), error, messageKey, nullptr);
+  JSValueRef stackRef = JSObjectGetProperty(this->context(), error, stackKey, nullptr);
+  JSStringRef messageStr = JSValueToStringCopy(this->context(), messageRef, nullptr);
+  JSStringRef stackStr = JSValueToStringCopy(this->context(), stackRef, nullptr);
+  std::string &&message = JSStringToStdString(messageStr);
+  std::string &&stack = JSStringToStdString(stackStr);
+  // handler(getContextId(), (message + '\n' + stack).c_str());
+  EngineNativeMethods::instance()->log(getContextId(), "error", (message + '\n' + stack).c_str());
+  JSStringRelease(messageKey);
+  JSStringRelease(stackKey);
+  JSStringRelease(messageStr);
+  JSStringRelease(stackStr);
+  return false;
 }
 
 JSCoreEngineContext *JSCoreEngineContext::getContext(JSContextRef context)
@@ -178,6 +140,7 @@ void JSCoreEngineContext::invokeJSModule(const char *moduleName, const char *met
     JSStringRelease(methodNameRef);
   }
   JSStringRelease(moduleNameRef);
+  handleException(exception);
 }
 
 JSCoreEngineContext::~JSCoreEngineContext()

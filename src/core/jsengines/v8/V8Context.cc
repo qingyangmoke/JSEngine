@@ -3,12 +3,12 @@
 #include "V8Runtime.h"
 #include "V8Console.h"
 #include "V8EngineModule.h"
+#include "libplatform/libplatform.h"
 using namespace JSEngineNS;
 
 V8EngineContext::V8EngineContext(int contextId) : EngineContext(contextId)
 {
   V8Runtime::instance()->Initialize();
-  EngineNativeMethods::instance()->log(_contextId, "info", "V8EngineContext init begin");
   v8::Isolate *isolate = V8Runtime::instance()->getIsolate();
   if (isolate == NULL)
   {
@@ -36,8 +36,6 @@ V8EngineContext::V8EngineContext(int contextId) : EngineContext(contextId)
   V8Console::initConsole(context);
   V8EngineModule::initModule(context);
 
-  // evaluateJavaScript("console.log('javascript', 'hello world');", "", 0);
-  EngineNativeMethods::instance()->log(_contextId, "info", "V8EngineContext init end");
   isolate = NULL;
 }
 
@@ -57,7 +55,7 @@ bool V8EngineContext::evaluateJavaScript(const char *sourceCode, const char *sou
   v8::Script::Compile(context, source, &origin).ToLocal(&script);
   if (tc.HasCaught())
   {
-    EngineNativeMethods::instance()->log(_contextId, "error", "Script contains compilation errors!");
+    handleException(&tc);
     return false;
   }
 
@@ -67,7 +65,7 @@ bool V8EngineContext::evaluateJavaScript(const char *sourceCode, const char *sou
 
     if (tc.HasCaught())
     {
-      EngineNativeMethods::instance()->log(_contextId, "error", "Error running script ");
+      handleException(&tc);
     }
   }
   else
@@ -112,6 +110,15 @@ void V8EngineContext::invokeJSModule(const char *moduleName, const char *methodN
       methodRef->Call(global, 1, args);
     }
   }
+}
+
+void V8EngineContext::handleException(const v8::TryCatch * try_catch) {
+    // const char * sourceURL = *v8::String::Utf8Value(V8Runtime::instance()->getIsolate(), try_catch.Message()->GetScriptResourceName();
+    // int lineNumber = try_catch.Message()->GetLineNumber(context).FromJust();
+    // int columNumber = try_catch.Message()->GetStartColumn(context).FromJust();
+    char * message = *v8::String::Utf8Value(V8Runtime::instance()->getIsolate(), try_catch->Exception());
+    EngineNativeMethods::instance()->log(_contextId, "error", message);
+    message = NULL;
 }
 
 V8EngineContext::~V8EngineContext()
