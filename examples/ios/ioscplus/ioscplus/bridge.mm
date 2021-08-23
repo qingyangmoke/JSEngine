@@ -21,8 +21,8 @@
 + (void)initBridge {
     if(!JSEngineNS::EngineNativeMethods::instance()->invokeModulePointer) {
         JSEngineNS::EngineNativeMethods::instance()->invokeModulePointer = ^const char *(int contextId, int callId, const char *moduleName, const char *methodName, const char *args) {
-            [OCSwiftEngineProxy invokeModuleWithContextId:contextId callId: callId moduleName:[NSString stringWithUTF8String:moduleName] methodName:[NSString stringWithUTF8String: methodName] args: [NSString stringWithUTF8String: args]];
-            return "success";
+            NSString *result = [OCSwiftEngineProxy invokeModuleWithContextId:contextId callId: callId moduleName:[NSString stringWithUTF8String:moduleName] methodName:[NSString stringWithUTF8String: methodName] args: [NSString stringWithUTF8String: args]];
+            return [result UTF8String];
         };
     }
     if(!JSEngineNS::EngineNativeMethods::instance()->logPointer) {
@@ -34,7 +34,8 @@
     }
 }
 
-+ (int)invokeModuleEvent:(int) contextId widthCallId: (int) callId withErrorCode:(int) errorCode withResult: (NSString *)result {
++ (int)invokeModuleEvent
+:(int) contextId widthCallId: (int) callId withErrorCode:(int) errorCode withResult: (NSString *)result {
     JSEngineNS::EngineNativeMethods::instance()->invokeModuleEvent(contextId, callId, errorCode, [result UTF8String]);
     return 0;
 }

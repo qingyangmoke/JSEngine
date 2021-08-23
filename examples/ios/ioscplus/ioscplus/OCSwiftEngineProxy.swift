@@ -29,8 +29,8 @@ public class OCSwiftEngineProxy : NSObject {
         _scopes.removeValue(forKey: contextId);
     }
     
-    public static func invokeModule(contextId: Int32, callId: Int32, moduleName: NSString, methodName: NSString, args: NSString) {
+    public static func invokeModule(contextId: Int32, callId: Int32, moduleName: NSString, methodName: NSString, args: NSString) -> String {
         NSLog("【OCSwiftEngineProxy】moduleName=%@, methodName=%@, args=%@ contextId=%d\n",  moduleName, methodName, args, contextId);
-        getScope(contextId: contextId)?.invokeNativeModule(callId: callId, moduleName: moduleName as String, methodName: methodName  as String, args: args  as String);
+        return getScope(contextId: contextId)?.invokeNativeModule(callId: callId, moduleName: moduleName as String, methodName: methodName  as String, args: args  as String) ?? "";
     }
 }

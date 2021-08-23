@@ -23,8 +23,9 @@ public class NativeModule {
         return _scope;
     }
     
-    public func invokeMethod(callId: Int32, methodName: String, args: String) {
+    public func invokeMethod(callId: Int32, methodName: String, args: String) -> String {
         // TODO: 子类需实现
+        return "";
     }
     
     public func invokeMethodCallBack(callId: Int32, errorCode: Int32, result: String) {

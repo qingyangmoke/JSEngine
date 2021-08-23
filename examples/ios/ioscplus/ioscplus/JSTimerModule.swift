@@ -27,7 +27,7 @@ public class JSTimerModule : NativeModule {
         super.init(moduleName: "JSMTimer", scope: scope);
     }
     
-    public override func invokeMethod(callId: Int32, methodName: String, args: String) {
+    public override func invokeMethod(callId: Int32, methodName: String, args: String) -> String {
         switch methodName {
         case "setInterval":
             if let data = args.data(using: String.Encoding.utf8, allowLossyConversion: true) {
@@ -35,8 +35,11 @@ public class JSTimerModule : NativeModule {
                     let timer = JSTimer(id: setIntervalArgs.id, scope: getScope());
                     timer.setInterval(interval: setIntervalArgs.interval);
                     _timers.updateValue(timer, forKey: setIntervalArgs.id);
+                    NSLog("setInterval=%d", setIntervalArgs.id);
+                    return String(setIntervalArgs.id);
                 }
             }
+            return "-1";
             break;
         case "setTimeout":
             if let data = args.data(using: String.Encoding.utf8, allowLossyConversion: true) {
@@ -44,8 +47,11 @@ public class JSTimerModule : NativeModule {
                     let timer = JSTimer(id: setTimeoutArgs.id, scope: getScope());
                     timer.setTimeout(delay: setTimeoutArgs.delay);
                     _timers.updateValue(timer, forKey: setTimeoutArgs.id);
+                    NSLog("setTimeout=%d", setTimeoutArgs.id);
+                    return String(setTimeoutArgs.id);
                 }
             }
+            return "-1";
             break;
         case "clearTimeout":
             clearTimer(args: args);
@@ -56,6 +62,7 @@ public class JSTimerModule : NativeModule {
         default:
             break;
         }
+        return "";
     }
     
     private func clearTimer(args: String) {
@@ -64,6 +71,7 @@ public class JSTimerModule : NativeModule {
                 if let timer = _timers[clearArgs.id] {
                     timer.stop();
                     _timers.removeValue(forKey: clearArgs.id);
+                    NSLog("clearTimer=%d", clearArgs.id);
                 }
             }
         }

@@ -24,12 +24,13 @@ public class NativeModuleManager {
         dict.updateValue(module, forKey: module.getModuleName());
     }
     
-    public func invokeNativeModule(callId: Int32, moduleName: String, methodName: String, args: String) {
+    public func invokeNativeModule(callId: Int32, moduleName: String, methodName: String, args: String) -> String {
         if let module = dict[moduleName] {
-            module.invokeMethod(callId: callId, methodName: methodName, args: args)
+            return module.invokeMethod(callId: callId, methodName: methodName, args: args);
         } else {
             let result = String(format: "{\"moduleName\": \"%@\", \"methodName\": \"%@\",\"msg\": \"method not found\"}", moduleName, methodName);
             getScope().invokeModuleEvent(callId: callId, errorCode: 404, result: result);
         }
+        return "";
     }
 }

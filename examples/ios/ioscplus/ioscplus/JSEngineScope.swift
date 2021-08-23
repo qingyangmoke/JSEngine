@@ -32,10 +32,10 @@ public class JSEngineScope {
         MyBridge.invokeModuleEvent(_contextId, widthCallId: callId, withErrorCode: errorCode, withResult: result);
     }
     
-    public func invokeNativeModule(callId: Int32, moduleName: String, methodName: String, args: String) {
+    public func invokeNativeModule(callId: Int32, moduleName: String, methodName: String, args: String) -> String {
         let result = String(format: "{\"moduleName\": \"%@\", \"methodName\": \"%@\",\"from\": \"swift\"}", moduleName, methodName);
         invokeModuleEvent(callId: callId, errorCode: 0, result: result);
-        _moduleManager.invokeNativeModule(callId: callId, moduleName: moduleName, methodName: methodName, args: args);
+        return _moduleManager.invokeNativeModule(callId: callId, moduleName: moduleName, methodName: methodName, args: args);
     }
     
     deinit {
