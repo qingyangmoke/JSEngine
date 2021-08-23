@@ -27,17 +27,7 @@ public class MainActivity extends AppCompatActivity {
         EngineScope scope = EngineScope.createScope(this);
         System.err.println("initEngine.scope.getContextId=" + scope.getContextId());
 
-        scope.loadBundle("promise.js");
-
-//        JSEngine.invokeJSModule(scope.getContextId(), "JSTimers", "sayHi" ,"hello1");
-//
-//        JSEngine.invokeJSModule(scope.getContextId(), "JSTimers", "sayHi" ,"hello2");
-
-//        CanvasElement canvas = new CanvasElement(1, scope);
-//        canvas.createRenderingContext("2d");
-//        canvas.setAttribute("width", "1080");
-//        canvas.setAttribute("height", "600");
-//        this.findViewById(R.id.action_text).setAlpha(0.5f);
+        scope.loadBundle("scroller.js");
     }
 
     @Override

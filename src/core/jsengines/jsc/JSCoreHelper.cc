@@ -38,3 +38,23 @@ std::string jsc::JSValueToStdString(JSContextRef jsContext, JSValueRef val, JSVa
   JSStringRelease(jscString);
   return ret;
 }
+
+std::string jsc::JSPropertyGetString(JSContextRef jsContext, JSObjectRef target, const char *key) {
+  JSStringRef keyStringRef = JSStringCreateWithUTF8CString(key);
+  JSValueRef propertyValueRef = JSObjectGetProperty(jsContext, target, keyStringRef, nullptr);
+  JSStringRef valueStringRef = JSValueToStringCopy(jsContext, propertyValueRef, nullptr);
+  std::string result = jsc::JSStringToStdString(valueStringRef);
+  JSStringRelease(keyStringRef);
+  JSStringRelease(valueStringRef);
+  return result;
+}
+
+
+double jsc::JSPropertyGetNumber(JSContextRef jsContext, JSObjectRef target, const char *key) {
+  JSStringRef keyStringRef = JSStringCreateWithUTF8CString(key);
+  JSValueRef propertyValueRef = JSObjectGetProperty(jsContext, target, keyStringRef, nullptr);
+  double result = JSValueToNumber(jsContext, propertyValueRef, nullptr);
+  JSStringRelease(keyStringRef);
+  return result;
+}
+

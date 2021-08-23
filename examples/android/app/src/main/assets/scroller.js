@@ -1,11 +1,9 @@
 document.title = "scroller 测试";
 
-
 var scrolller = document.createElement('scroller');
 scrolller.style.flex = 1;
 scrolller.style.backgroundColor = '#00ff00';
 document.body.appendChild(scrolller);
-
 
 var div = document.createElement('div');
 scrolller.appendChild(div);

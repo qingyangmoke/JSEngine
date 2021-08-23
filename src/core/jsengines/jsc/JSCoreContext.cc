@@ -85,20 +85,17 @@ bool JSCoreEngineContext::handleException(JSValueRef exc)
     return true;
   }
   JSObjectRef error = JSValueToObject(this->context(), exc, nullptr);
-  JSStringRef messageKey = JSStringCreateWithUTF8CString("message");
-  JSStringRef stackKey = JSStringCreateWithUTF8CString("stack");
-  JSValueRef messageRef = JSObjectGetProperty(this->context(), error, messageKey, nullptr);
-  JSValueRef stackRef = JSObjectGetProperty(this->context(), error, stackKey, nullptr);
-  JSStringRef messageStr = JSValueToStringCopy(this->context(), messageRef, nullptr);
-  JSStringRef stackStr = JSValueToStringCopy(this->context(), stackRef, nullptr);
-  std::string &&message = JSStringToStdString(messageStr);
-  std::string &&stack = JSStringToStdString(stackStr);
-  // handler(getContextId(), (message + '\n' + stack).c_str());
-  EngineNativeMethods::instance()->log(getContextId(), "error", (message + '\n' + stack).c_str());
-  JSStringRelease(messageKey);
-  JSStringRelease(stackKey);
-  JSStringRelease(messageStr);
-  JSStringRelease(stackStr);
+  std::string stack = JSPropertyGetString(this->context(), error, "stack");
+  std::string message = JSPropertyGetString(this->context(), error, "message");
+  // std::string fileName = JSPropertyGetString(this->context(), error, "sourceURL");
+  // double columnNumber = JSPropertyGetNumber(this->context(), error, "column");
+  // double lineNumber = JSPropertyGetNumber(this->context(), error, "line");
+  JSStringRef argsStringRef = JSValueCreateJSONString(this->context(), error, 0, NULL);
+  // JSObjectRef newObj = JSValueMakeFromJSONString("{}");
+  // JSObjectSetProperty();
+  std::string errorString = jsc::JSStringToStdString(argsStringRef);
+  EngineNativeMethods::instance()->invokeModule(getContextId(), "Exception", "JSError", (stack + '\n' + message).c_str(), nullptr);
+  JSStringRelease(argsStringRef);
   return false;
 }
 

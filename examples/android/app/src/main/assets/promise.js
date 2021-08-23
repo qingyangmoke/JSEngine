@@ -16,12 +16,19 @@ new Promise(function promise(resolve) {
     console.log('Promise', 'catch');
 });
 
-//setInterval(function() {
-//    console.log('setInterval', 'xxxx');
-//}, 100)
+setTimeout(function() {
+    Promise.sss();
+    console.log('setInterval', 'xxxx');
+}, 100);
 
-// Global error handler used by JS Engine
-// // @ts-ignore
-window.__global_onerror_handler__ = function (error) {
-   console.log('__global_onerror_handler__');
-};
+setTimeout(function() {
+    console.log('setInterval', 'xxxx');
+}, 200)
+
+//window.onerror = function (error) {
+//   console.log('__global_onerror_handler__');
+//};
+
+window.onerror = function(msg) {
+    console.err("error", "xxx");
+}

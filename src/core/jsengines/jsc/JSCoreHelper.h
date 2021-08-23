@@ -38,4 +38,8 @@ namespace JSEngineNS::jsc
   std::string JSStringToStdString(JSStringRef jsString);
 
   std::string JSValueToStdString(JSContextRef jsContext, JSValueRef val, JSValueRef *exception);
+
+  std::string JSPropertyGetString(JSContextRef jsContext, JSObjectRef val, const char *key);
+
+  double JSPropertyGetNumber(JSContextRef jsContext, JSObjectRef val, const char *key);
 }
