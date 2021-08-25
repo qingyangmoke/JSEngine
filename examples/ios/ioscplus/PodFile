@@ -4,4 +4,5 @@ use_frameworks!
 
 target 'ioscplus' do
   pod 'YogaKit', '~> 1.7'
+  pod 'UIColor_Hex_Swift', '~> 5.1.6'
 end

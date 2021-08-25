@@ -2,6 +2,8 @@ class UICommand {
     static MODULE_NAME = 'UI';
     // 设置style样式
     static SET_STYLE: string = 'setStyle';
+    // 删除style样式
+    static REMOVE_STYLE: string = 'removeStyle';
     // 创建对象
     static CREATE_ELEMENT: string = 'createElement';
     // 新增属性

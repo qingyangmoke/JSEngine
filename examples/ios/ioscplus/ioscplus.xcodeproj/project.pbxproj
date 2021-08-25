@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,6 +17,30 @@
 		E40438BE2655275A00AFFAAB /* bridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = E40438BD2655275A00AFFAAB /* bridge.mm */; };
 		E40438C1265C983100AFFAAB /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = E40438C0265C983000AFFAAB /* main.js */; };
 		E40438E4265C9FD200AFFAAB /* EngineScope.mm in Sources */ = {isa = PBXBuildFile; fileRef = E40438E3265C9FD200AFFAAB /* EngineScope.mm */; };
+		E419C19F26D3D216009AC69F /* Pods_ioscplus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8000306166344E1B46D7884E /* Pods_ioscplus.framework */; };
+		E419C1CB26D486F0009AC69F /* UIModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = E419C1CA26D486F0009AC69F /* UIModule.swift */; };
+		E419C1CE26D48870009AC69F /* UIRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = E419C1CD26D48870009AC69F /* UIRender.swift */; };
+		E419C1D026D488BE009AC69F /* IUINode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E419C1CF26D488BE009AC69F /* IUINode.swift */; };
+		E419C1D226D48C14009AC69F /* YogaUIRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = E419C1D126D48C14009AC69F /* YogaUIRender.swift */; };
+		E419C1D426D48DD4009AC69F /* CreateElementArgs.swift in Sources */ = {isa = PBXBuildFile; fileRef = E419C1D326D48DD4009AC69F /* CreateElementArgs.swift */; };
+		E419C1D726D49070009AC69F /* SetStyleArgs.swift in Sources */ = {isa = PBXBuildFile; fileRef = E419C1D626D49070009AC69F /* SetStyleArgs.swift */; };
+		E419C1D926D49363009AC69F /* SetAttributeArgs.swift in Sources */ = {isa = PBXBuildFile; fileRef = E419C1D826D49363009AC69F /* SetAttributeArgs.swift */; };
+		E419C1DB26D493DC009AC69F /* RemoveAttributeArgs.swift in Sources */ = {isa = PBXBuildFile; fileRef = E419C1DA26D493DC009AC69F /* RemoveAttributeArgs.swift */; };
+		E419C1DD26D4943A009AC69F /* GetAttributeArgs.swift in Sources */ = {isa = PBXBuildFile; fileRef = E419C1DC26D4943A009AC69F /* GetAttributeArgs.swift */; };
+		E419C1DF26D494FF009AC69F /* InsertChildArgs.swift in Sources */ = {isa = PBXBuildFile; fileRef = E419C1DE26D494FF009AC69F /* InsertChildArgs.swift */; };
+		E419C1E126D495DC009AC69F /* ReplaceChildArgs.swift in Sources */ = {isa = PBXBuildFile; fileRef = E419C1E026D495DC009AC69F /* ReplaceChildArgs.swift */; };
+		E419C1E326D495F2009AC69F /* ChildArgs.swift in Sources */ = {isa = PBXBuildFile; fileRef = E419C1E226D495F2009AC69F /* ChildArgs.swift */; };
+		E419C1E526D4967B009AC69F /* ScrollToArgs.swift in Sources */ = {isa = PBXBuildFile; fileRef = E419C1E426D4967B009AC69F /* ScrollToArgs.swift */; };
+		E419C1E826D49AE8009AC69F /* YogaUINode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E419C1E726D49AE8009AC69F /* YogaUINode.swift */; };
+		E419C1EA26D49CD0009AC69F /* ContainerYogaUINode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E419C1E926D49CD0009AC69F /* ContainerYogaUINode.swift */; };
+		E419C1EC26D49FFD009AC69F /* BodyYogaUINode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E419C1EB26D49FFD009AC69F /* BodyYogaUINode.swift */; };
+		E419C1EE26D4A4F0009AC69F /* DivYogaUINode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E419C1ED26D4A4F0009AC69F /* DivYogaUINode.swift */; };
+		E419C1F026D4A732009AC69F /* YogaUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E419C1EF26D4A732009AC69F /* YogaUIView.swift */; };
+		E419C1F226D4CC68009AC69F /* YogaStyleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E419C1F126D4CC68009AC69F /* YogaStyleHelper.swift */; };
+		E419C1F826D4F8F7009AC69F /* LabelYogaUINode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E419C1F726D4F8F7009AC69F /* LabelYogaUINode.swift */; };
+		E419C1FA26D5D98A009AC69F /* ImageYogaUINode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E419C1F926D5D989009AC69F /* ImageYogaUINode.swift */; };
+		E419C1FD26D5DC99009AC69F /* ImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E419C1FC26D5DC99009AC69F /* ImageHelper.swift */; };
+		E419C1FF26D664AD009AC69F /* InputYogaUINode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E419C1FE26D664AD009AC69F /* InputYogaUINode.swift */; };
 		E46E7BCA26BAC80B0051A5BD /* OCSwiftEngineProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46E7BC926BAC80B0051A5BD /* OCSwiftEngineProxy.swift */; };
 		E46E7BCC26BB8E470051A5BD /* JSEngineScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46E7BCB26BB8E470051A5BD /* JSEngineScope.swift */; };
 		E46E7BCE26BB965D0051A5BD /* NativeModuleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46E7BCD26BB965D0051A5BD /* NativeModuleManager.swift */; };
@@ -40,6 +64,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4F142B752B49BF17FFB1448A /* Pods-ioscplus.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ioscplus.debug.xcconfig"; path = "Target Support Files/Pods-ioscplus/Pods-ioscplus.debug.xcconfig"; sourceTree = "<group>"; };
+		8000306166344E1B46D7884E /* Pods_ioscplus.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ioscplus.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A22394DF28160EC7DE44E3BB /* Pods-ioscplus.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ioscplus.release.xcconfig"; path = "Target Support Files/Pods-ioscplus/Pods-ioscplus.release.xcconfig"; sourceTree = "<group>"; };
 		E404385B265509F200AFFAAB /* ioscplus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ioscplus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E404385E265509F200AFFAAB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E4043862265509F200AFFAAB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -54,6 +81,29 @@
 		E40438C0265C983000AFFAAB /* main.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = main.js; sourceTree = "<group>"; };
 		E40438C4265C9CAF00AFFAAB /* EngineScope.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EngineScope.h; sourceTree = "<group>"; };
 		E40438E3265C9FD200AFFAAB /* EngineScope.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EngineScope.mm; sourceTree = "<group>"; };
+		E419C1CA26D486F0009AC69F /* UIModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIModule.swift; sourceTree = "<group>"; };
+		E419C1CD26D48870009AC69F /* UIRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIRender.swift; sourceTree = "<group>"; };
+		E419C1CF26D488BE009AC69F /* IUINode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IUINode.swift; sourceTree = "<group>"; };
+		E419C1D126D48C14009AC69F /* YogaUIRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YogaUIRender.swift; sourceTree = "<group>"; };
+		E419C1D326D48DD4009AC69F /* CreateElementArgs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateElementArgs.swift; sourceTree = "<group>"; };
+		E419C1D626D49070009AC69F /* SetStyleArgs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetStyleArgs.swift; sourceTree = "<group>"; };
+		E419C1D826D49363009AC69F /* SetAttributeArgs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetAttributeArgs.swift; sourceTree = "<group>"; };
+		E419C1DA26D493DC009AC69F /* RemoveAttributeArgs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveAttributeArgs.swift; sourceTree = "<group>"; };
+		E419C1DC26D4943A009AC69F /* GetAttributeArgs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAttributeArgs.swift; sourceTree = "<group>"; };
+		E419C1DE26D494FF009AC69F /* InsertChildArgs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertChildArgs.swift; sourceTree = "<group>"; };
+		E419C1E026D495DC009AC69F /* ReplaceChildArgs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplaceChildArgs.swift; sourceTree = "<group>"; };
+		E419C1E226D495F2009AC69F /* ChildArgs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildArgs.swift; sourceTree = "<group>"; };
+		E419C1E426D4967B009AC69F /* ScrollToArgs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollToArgs.swift; sourceTree = "<group>"; };
+		E419C1E726D49AE8009AC69F /* YogaUINode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YogaUINode.swift; sourceTree = "<group>"; };
+		E419C1E926D49CD0009AC69F /* ContainerYogaUINode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerYogaUINode.swift; sourceTree = "<group>"; };
+		E419C1EB26D49FFD009AC69F /* BodyYogaUINode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyYogaUINode.swift; sourceTree = "<group>"; };
+		E419C1ED26D4A4F0009AC69F /* DivYogaUINode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivYogaUINode.swift; sourceTree = "<group>"; };
+		E419C1EF26D4A732009AC69F /* YogaUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YogaUIView.swift; sourceTree = "<group>"; };
+		E419C1F126D4CC68009AC69F /* YogaStyleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YogaStyleHelper.swift; sourceTree = "<group>"; };
+		E419C1F726D4F8F7009AC69F /* LabelYogaUINode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelYogaUINode.swift; sourceTree = "<group>"; };
+		E419C1F926D5D989009AC69F /* ImageYogaUINode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageYogaUINode.swift; sourceTree = "<group>"; };
+		E419C1FC26D5DC99009AC69F /* ImageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageHelper.swift; sourceTree = "<group>"; };
+		E419C1FE26D664AD009AC69F /* InputYogaUINode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputYogaUINode.swift; sourceTree = "<group>"; };
 		E46E7BC926BAC80B0051A5BD /* OCSwiftEngineProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCSwiftEngineProxy.swift; sourceTree = "<group>"; };
 		E46E7BCB26BB8E470051A5BD /* JSEngineScope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSEngineScope.swift; sourceTree = "<group>"; };
 		E46E7BCD26BB965D0051A5BD /* NativeModuleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeModuleManager.swift; sourceTree = "<group>"; };
@@ -67,6 +117,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E419C19F26D3D216009AC69F /* Pods_ioscplus.framework in Frameworks */,
 				E40438B126550D2400AFFAAB /* jsengine_bridge.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -74,12 +125,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DFA103C60F4AF37ABE8A6FC8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8000306166344E1B46D7884E /* Pods_ioscplus.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		E4043852265509F200AFFAAB = {
 			isa = PBXGroup;
 			children = (
 				E40438AF26550D1500AFFAAB /* jsengine_bridge.framework */,
 				E404385D265509F200AFFAAB /* ioscplus */,
 				E404385C265509F200AFFAAB /* Products */,
+				F548A09381058D40242E4262 /* Pods */,
+				DFA103C60F4AF37ABE8A6FC8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -94,7 +155,7 @@
 		E404385D265509F200AFFAAB /* ioscplus */ = {
 			isa = PBXGroup;
 			children = (
-				E40438E5265CEFC700AFFAAB /* modules */,
+				E419C1C926D485AB009AC69F /* jsengine */,
 				E404385E265509F200AFFAAB /* AppDelegate.swift */,
 				E4043862265509F200AFFAAB /* ViewController.swift */,
 				E4043864265509F300AFFAAB /* Main.storyboard */,
@@ -103,16 +164,6 @@
 				E4043869265509F500AFFAAB /* LaunchScreen.storyboard */,
 				E404386C265509F500AFFAAB /* Info.plist */,
 				E40438B526550E8A00AFFAAB /* ioscplus-Bridging-Header.h */,
-				E40438BD2655275A00AFFAAB /* bridge.mm */,
-				E40438BF2655276700AFFAAB /* bridge.h */,
-				E40438C4265C9CAF00AFFAAB /* EngineScope.h */,
-				E40438E3265C9FD200AFFAAB /* EngineScope.mm */,
-				E46E7BC926BAC80B0051A5BD /* OCSwiftEngineProxy.swift */,
-				E46E7BCB26BB8E470051A5BD /* JSEngineScope.swift */,
-				E46E7BCD26BB965D0051A5BD /* NativeModuleManager.swift */,
-				E46E7BCF26BB967B0051A5BD /* NativeModule.swift */,
-				E46E7BD126BB9A530051A5BD /* JSTimerModule.swift */,
-				E46E7BD326BBC53A0051A5BD /* JSTimer.swift */,
 			);
 			path = ioscplus;
 			sourceTree = "<group>";
@@ -120,8 +171,91 @@
 		E40438E5265CEFC700AFFAAB /* modules */ = {
 			isa = PBXGroup;
 			children = (
+				E419C1FB26D5DC80009AC69F /* core */,
+				E419C1E626D498DE009AC69F /* yogaDom */,
+				E419C1D526D48DEE009AC69F /* args */,
+				E419C1CC26D48849009AC69F /* renders */,
+				E46E7BD326BBC53A0051A5BD /* JSTimer.swift */,
+				E46E7BD126BB9A530051A5BD /* JSTimerModule.swift */,
+				E46E7BCD26BB965D0051A5BD /* NativeModuleManager.swift */,
+				E46E7BCF26BB967B0051A5BD /* NativeModule.swift */,
+				E419C1CA26D486F0009AC69F /* UIModule.swift */,
 			);
 			name = modules;
+			path = ..;
+			sourceTree = "<group>";
+		};
+		E419C1C926D485AB009AC69F /* jsengine */ = {
+			isa = PBXGroup;
+			children = (
+				E40438BD2655275A00AFFAAB /* bridge.mm */,
+				E40438BF2655276700AFFAAB /* bridge.h */,
+				E40438C4265C9CAF00AFFAAB /* EngineScope.h */,
+				E40438E3265C9FD200AFFAAB /* EngineScope.mm */,
+				E46E7BC926BAC80B0051A5BD /* OCSwiftEngineProxy.swift */,
+				E46E7BCB26BB8E470051A5BD /* JSEngineScope.swift */,
+				E40438E5265CEFC700AFFAAB /* modules */,
+			);
+			path = jsengine;
+			sourceTree = "<group>";
+		};
+		E419C1CC26D48849009AC69F /* renders */ = {
+			isa = PBXGroup;
+			children = (
+				E419C1CD26D48870009AC69F /* UIRender.swift */,
+				E419C1CF26D488BE009AC69F /* IUINode.swift */,
+				E419C1D126D48C14009AC69F /* YogaUIRender.swift */,
+			);
+			name = renders;
+			sourceTree = "<group>";
+		};
+		E419C1D526D48DEE009AC69F /* args */ = {
+			isa = PBXGroup;
+			children = (
+				E419C1D326D48DD4009AC69F /* CreateElementArgs.swift */,
+				E419C1D626D49070009AC69F /* SetStyleArgs.swift */,
+				E419C1D826D49363009AC69F /* SetAttributeArgs.swift */,
+				E419C1DA26D493DC009AC69F /* RemoveAttributeArgs.swift */,
+				E419C1DC26D4943A009AC69F /* GetAttributeArgs.swift */,
+				E419C1DE26D494FF009AC69F /* InsertChildArgs.swift */,
+				E419C1E026D495DC009AC69F /* ReplaceChildArgs.swift */,
+				E419C1E226D495F2009AC69F /* ChildArgs.swift */,
+				E419C1E426D4967B009AC69F /* ScrollToArgs.swift */,
+			);
+			path = args;
+			sourceTree = "<group>";
+		};
+		E419C1E626D498DE009AC69F /* yogaDom */ = {
+			isa = PBXGroup;
+			children = (
+				E419C1E726D49AE8009AC69F /* YogaUINode.swift */,
+				E419C1E926D49CD0009AC69F /* ContainerYogaUINode.swift */,
+				E419C1EB26D49FFD009AC69F /* BodyYogaUINode.swift */,
+				E419C1ED26D4A4F0009AC69F /* DivYogaUINode.swift */,
+				E419C1EF26D4A732009AC69F /* YogaUIView.swift */,
+				E419C1F126D4CC68009AC69F /* YogaStyleHelper.swift */,
+				E419C1F726D4F8F7009AC69F /* LabelYogaUINode.swift */,
+				E419C1F926D5D989009AC69F /* ImageYogaUINode.swift */,
+				E419C1FE26D664AD009AC69F /* InputYogaUINode.swift */,
+			);
+			name = yogaDom;
+			sourceTree = "<group>";
+		};
+		E419C1FB26D5DC80009AC69F /* core */ = {
+			isa = PBXGroup;
+			children = (
+				E419C1FC26D5DC99009AC69F /* ImageHelper.swift */,
+			);
+			path = core;
+			sourceTree = "<group>";
+		};
+		F548A09381058D40242E4262 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				4F142B752B49BF17FFB1448A /* Pods-ioscplus.debug.xcconfig */,
+				A22394DF28160EC7DE44E3BB /* Pods-ioscplus.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -131,10 +265,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E4043885265509F500AFFAAB /* Build configuration list for PBXNativeTarget "ioscplus" */;
 			buildPhases = (
+				6D7C31B567BBF8FA7F0C7F40 /* [CP] Check Pods Manifest.lock */,
 				E4043857265509F200AFFAAB /* Sources */,
 				E4043858265509F200AFFAAB /* Frameworks */,
 				E4043859265509F200AFFAAB /* Resources */,
 				E40438A026550B5800AFFAAB /* Embed Frameworks */,
+				6324588A957F4119F1300BC2 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -191,21 +327,86 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		6324588A957F4119F1300BC2 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ioscplus/Pods-ioscplus-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ioscplus/Pods-ioscplus-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ioscplus/Pods-ioscplus-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6D7C31B567BBF8FA7F0C7F40 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ioscplus-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		E4043857265509F200AFFAAB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E419C1D426D48DD4009AC69F /* CreateElementArgs.swift in Sources */,
+				E419C1EE26D4A4F0009AC69F /* DivYogaUINode.swift in Sources */,
+				E419C1DB26D493DC009AC69F /* RemoveAttributeArgs.swift in Sources */,
+				E419C1CB26D486F0009AC69F /* UIModule.swift in Sources */,
+				E419C1EC26D49FFD009AC69F /* BodyYogaUINode.swift in Sources */,
 				E46E7BD426BBC53A0051A5BD /* JSTimer.swift in Sources */,
+				E419C1F226D4CC68009AC69F /* YogaStyleHelper.swift in Sources */,
 				E46E7BD226BB9A530051A5BD /* JSTimerModule.swift in Sources */,
+				E419C1D026D488BE009AC69F /* IUINode.swift in Sources */,
+				E419C1DF26D494FF009AC69F /* InsertChildArgs.swift in Sources */,
 				E46E7BCA26BAC80B0051A5BD /* OCSwiftEngineProxy.swift in Sources */,
+				E419C1E126D495DC009AC69F /* ReplaceChildArgs.swift in Sources */,
+				E419C1E526D4967B009AC69F /* ScrollToArgs.swift in Sources */,
+				E419C1E326D495F2009AC69F /* ChildArgs.swift in Sources */,
 				E46E7BCE26BB965D0051A5BD /* NativeModuleManager.swift in Sources */,
+				E419C1FD26D5DC99009AC69F /* ImageHelper.swift in Sources */,
+				E419C1D726D49070009AC69F /* SetStyleArgs.swift in Sources */,
 				E46E7BD026BB967B0051A5BD /* NativeModule.swift in Sources */,
 				E46E7BCC26BB8E470051A5BD /* JSEngineScope.swift in Sources */,
+				E419C1D926D49363009AC69F /* SetAttributeArgs.swift in Sources */,
 				E40438E4265C9FD200AFFAAB /* EngineScope.mm in Sources */,
 				E40438BE2655275A00AFFAAB /* bridge.mm in Sources */,
+				E419C1FA26D5D98A009AC69F /* ImageYogaUINode.swift in Sources */,
+				E419C1F026D4A732009AC69F /* YogaUIView.swift in Sources */,
 				E4043863265509F200AFFAAB /* ViewController.swift in Sources */,
+				E419C1FF26D664AD009AC69F /* InputYogaUINode.swift in Sources */,
 				E404385F265509F200AFFAAB /* AppDelegate.swift in Sources */,
+				E419C1F826D4F8F7009AC69F /* LabelYogaUINode.swift in Sources */,
+				E419C1DD26D4943A009AC69F /* GetAttributeArgs.swift in Sources */,
+				E419C1D226D48C14009AC69F /* YogaUIRender.swift in Sources */,
+				E419C1CE26D48870009AC69F /* UIRender.swift in Sources */,
+				E419C1EA26D49CD0009AC69F /* ContainerYogaUINode.swift in Sources */,
+				E419C1E826D49AE8009AC69F /* YogaUINode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -349,6 +550,7 @@
 		};
 		E4043886265509F500AFFAAB /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4F142B752B49BF17FFB1448A /* Pods-ioscplus.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -382,6 +584,7 @@
 		};
 		E4043887265509F500AFFAAB /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A22394DF28160EC7DE44E3BB /* Pods-ioscplus.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -390,7 +593,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4ANB84C5XV;
 				ENABLE_BITCODE = NO;
-				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "i386 x86_64";
+				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "x86_64 i386";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "arm64 arm64e armv7";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

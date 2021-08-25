@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import YogaKit
 class ViewController: UIViewController {
     var name = "view";
     
@@ -30,7 +30,7 @@ class ViewController: UIViewController {
         {
             print("Contents could not be loaded.")
         }
-        var scope = OCSwiftEngineProxy.createScope();
+        let scope = OCSwiftEngineProxy.createScope(view: self)
         scope.evaluateJavaScript(sourceCode: sourceCode, sourceURL: sourceURL, startLine: 0);
         scope.invokeJSModule(moduleName: "JSTimers", methodName: "sayHi", args: "from swift");
         
@@ -66,10 +66,43 @@ class ViewController: UIViewController {
         }
     }
     
+    func yogaTest() {
+        let contentView = YogaUIView()
+        contentView.backgroundColor = .lightGray
+        contentView.configureLayout { (layout) in
+          layout.isEnabled = true
+          layout.flexDirection = .row
+          layout.width = 320
+          layout.height = 80
+          layout.marginTop = 40
+          layout.marginLeft = 10
+        }
+        
+        let child1 = YogaUIView()
+        child1.backgroundColor = .yellow
+        child1.configureLayout{ (layout)  in
+          layout.isEnabled = true
+          layout.width = 80
+        }
+        contentView.addSubview(child1)
+        
+        let child2 = YogaUIView()
+        child2.backgroundColor = .blue
+        child2.configureLayout{ (layout)  in
+          layout.isEnabled = true
+          layout.flex = 0
+          layout.width = 80
+          layout.flexGrow = 1
+        }
+        contentView.addSubview(child2)
+        
+        view.addSubview(contentView)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("hello world!");
-        MyBridge.initBridge();
-        self.testEngine();
+        print("hello world!")
+        MyBridge.initBridge()
+        self.testEngine()
+        
     }
 }

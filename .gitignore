@@ -37,3 +37,4 @@
 build/**
 main.dSYM/**
 node_modules/**
+examples/ios/ioscplus/Pods/**

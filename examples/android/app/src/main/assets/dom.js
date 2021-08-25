@@ -14,8 +14,8 @@ label.style.backgroundColor = '#ff0000';
 label.style.color = '#ffffff';
 label.style.width = '375rpx';
 label.style.height = '100rpx';
-label.style["text-align"] = "center";
-label.style["vertical-align"] = "middle";
+label.style.textAlign = "center";
+label.style.verticalAlign = "middle";
 div.appendChild(label);
 
 var img = document.createElement('img');
@@ -27,7 +27,7 @@ div.appendChild(img);
 
 
 var input = document.createElement('input');
-input.style['placeholder-color'] = "#ff0000";
+input.style.placeholderColor = "#ff0000";
 input.setAttribute('placeholder', "input hello");
 input.setAttribute('type', "number");
 div.appendChild(input);

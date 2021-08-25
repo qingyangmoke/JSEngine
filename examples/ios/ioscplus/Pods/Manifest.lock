@@ -1,0 +1,24 @@
+PODS:
+  - UIColor_Hex_Swift (5.1.6)
+  - Yoga (1.14.0)
+  - YogaKit (1.18.1):
+    - Yoga (~> 1.14)
+
+DEPENDENCIES:
+  - UIColor_Hex_Swift (~> 5.1.6)
+  - YogaKit (~> 1.7)
+
+SPEC REPOS:
+  trunk:
+    - UIColor_Hex_Swift
+    - Yoga
+    - YogaKit
+
+SPEC CHECKSUMS:
+  UIColor_Hex_Swift: e9d400d774c9b31d82801ca76b5301a38086f590
+  Yoga: cff67a400f6b74dc38eb0bad4f156673d9aa980c
+  YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
+
+PODFILE CHECKSUM: 42d00a905a4ede7f3ca84a6dd615ae7ebc64de00
+
+COCOAPODS: 1.10.1

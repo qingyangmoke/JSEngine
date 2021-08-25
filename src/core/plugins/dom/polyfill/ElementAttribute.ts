@@ -49,7 +49,7 @@ export default class ElementAttribute {
             UICommand.sendCommand(UICommand.SET_ATTRIBUTE, {
                 uniqueId: this.uniqueId,
                 attribute: {
-                    [key]: value,
+                    [key]: `${value}`,
                 },
             });
         }

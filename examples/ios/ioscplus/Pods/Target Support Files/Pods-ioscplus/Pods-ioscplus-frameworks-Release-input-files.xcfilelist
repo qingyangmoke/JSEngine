@@ -1,0 +1,4 @@
+${PODS_ROOT}/Target Support Files/Pods-ioscplus/Pods-ioscplus-frameworks.sh
+${BUILT_PRODUCTS_DIR}/UIColor_Hex_Swift/UIColor_Hex_Swift.framework
+${BUILT_PRODUCTS_DIR}/Yoga/yoga.framework
+${BUILT_PRODUCTS_DIR}/YogaKit/YogaKit.framework

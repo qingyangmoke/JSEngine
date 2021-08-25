@@ -1,16 +1,11 @@
 package com.jnibridge;
 
 import android.app.Activity;
-import android.content.res.AssetManager;
 
-import com.jnibridge.modules.renders.DomUIRender;
+import com.jnibridge.modules.renders.YogaUIRender;
 import com.jnibridge.modules.renders.UIRender;
 import com.jnibridge.utils.BundleLoader;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.sql.Time;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +35,7 @@ public class EngineScope {
         _contextId = ++EngineScope.contextIdSeed;
         _activity = activity;
         _moduleManager = new ModuleManager(this);
-        _uiRender = new DomUIRender(this);
+        _uiRender = new YogaUIRender(this);
         _bundleLoader = new BundleLoader(this);
     }
 

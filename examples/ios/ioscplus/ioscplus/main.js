@@ -39,4 +39,66 @@ function bootstrap() {
     }, 5000);
 }
 
-bootstrap();
+
+function dom() {
+    var div = document.createElement('div');
+    div.style.width = '750rpx';
+    div.style.height = '1400rpx';
+    div.style.overflow = 'hidden';
+    div.style.alginItems = 'stretch';
+    div.style.alginContent = 'stretch';
+    div.style.backgroundColor = '#00ff00';
+    document.body.appendChild(div);
+
+    var label = document.createElement('label');
+    label.setAttribute('text', 'mylabel');
+    label.style.width = '375rpx';
+    label.style.height = '100rpx';
+//    label.flexBasis = 'auto';
+//    label.style.flexShrink = 1;
+    div.appendChild(label);
+
+    var label = document.createElement('label');
+    label.setAttribute('text', 'mylabel2');
+    label.style.backgroundColor = '#ff0000';
+    label.style.color = '#ffffff';
+    label.style.width = '375rpx';
+    label.style.height = '100rpx';
+    label.style.textAlign = "center";
+    label.style.verticalAlign = "middle";
+//    label.flexBasis = 'auto';
+//    label.style.flexShrink = 1;
+    div.appendChild(label);
+    
+    var img = document.createElement('img');
+    img.src = 'http://weathernew.pae.baidu.com/static/weathernew/static/image/0_2c174d7.png';
+//    img.style.width = '100%';
+//    img.style.height = '100%';
+    img.style.height = '375rpx';
+    img.flexBasis = 'auto';
+//    img.style.flexShrink = 1;
+    div.appendChild(img)
+    
+    var img = document.createElement('img');
+    img.src = 'http://weathernew.pae.baidu.com/static/weathernew/static/image/0_2c174d7.png';
+//    img.style.width = '100%';
+//    img.style.height = '100%';
+    img.style.height = '375rpx';
+    img.flexBasis = 'auto';
+//    img.style.flexShrink = 1;
+    div.appendChild(img)
+    
+    var img = document.createElement('img');
+    img.src = 'http://weathernew.pae.baidu.com/static/weathernew/static/image/0_2c174d7.png';
+//    img.style.width = '100%';
+//    img.style.height = '100%';
+    img.style.height = '375rpx';
+    img.flexBasis = 'auto';
+//    img.style.flexShrink = 1;
+    div.appendChild(img)
+
+}
+
+//bootstrap();
+
+dom();

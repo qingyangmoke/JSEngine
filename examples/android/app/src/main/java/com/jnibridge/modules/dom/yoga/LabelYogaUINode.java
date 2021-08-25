@@ -42,7 +42,7 @@ public class LabelYogaUINode extends YogaUINode {
             case "color":
                 getTextView().setTextColor(Color.parseColor(value));
                 break;
-            case "text-align":
+            case "textAlign":
                 switch (value) {
                     case  "left":
                         getTextView().setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
@@ -55,7 +55,7 @@ public class LabelYogaUINode extends YogaUINode {
                         break;
                 }
                 break;
-            case "vertical-align":
+            case "verticalAlign":
                 switch (value) {
                     case "middle":
                         getTextView().setGravity(Gravity.CENTER_VERTICAL);

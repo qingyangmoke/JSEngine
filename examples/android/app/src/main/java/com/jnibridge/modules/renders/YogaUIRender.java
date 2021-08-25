@@ -16,8 +16,8 @@ import com.jnibridge.modules.dom.yoga.LabelYogaUINode;
 import com.jnibridge.modules.dom.yoga.ScrollViewYogaUINode;
 import com.jnibridge.modules.dom.yoga.YogaStyleHelper;
 
-public class DomUIRender extends UIRender {
-    public DomUIRender(EngineScope scope) {
+public class YogaUIRender extends UIRender {
+    public YogaUIRender(EngineScope scope) {
         super(scope);
         SoLoader.init(getScope().getActivity(), false);
         onWindowReisze();

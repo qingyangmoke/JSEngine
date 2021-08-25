@@ -57,12 +57,6 @@ public class InputYogaUINode extends YogaUINode {
             case "placeholder":
                 getEditText().setHint(value);
                 break;
-            case "color":
-                getEditText().setTextColor(Color.parseColor(value));
-                break;
-            case "font-size":
-                getEditText().setTextSize(YogaStyleHelper.getDisplayUnit(value));
-                break;
             default:
                 super.setAttribute(key, value);
                 break;
@@ -72,7 +66,13 @@ public class InputYogaUINode extends YogaUINode {
     @Override
     public void setStyle(String key, String value) {
         switch (key) {
-            case "placeholder-color":
+            case "color":
+                getEditText().setTextColor(Color.parseColor(value));
+                break;
+            case "fontSize":
+                getEditText().setTextSize(YogaStyleHelper.getDisplayUnit(value));
+                break;
+            case "placeholderColor":
                 getEditText().setHintTextColor(Color.parseColor(value));
                 break;
             default:

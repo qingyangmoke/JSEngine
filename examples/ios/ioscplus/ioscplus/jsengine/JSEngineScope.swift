@@ -6,18 +6,38 @@
 //
 
 import Foundation
-
+import UIKit
 public class JSEngineScope {
     private var _contextId: Int32;
     private var _moduleManager: NativeModuleManager! = nil;
-    public init(contextId: Int32) {
-        _contextId = contextId;
-        _moduleManager = NativeModuleManager(scope: self);
-        MyBridge.createScope(_contextId);
+    private var _uiRender: UIRender! = nil;
+    private var _view: UIViewController! = nil;
+    private var _jsScopeInited: Bool = false;
+    public init(contextId: Int32, view: UIViewController) {
+        _contextId = contextId
+        _view = view
+        _moduleManager = NativeModuleManager(scope: self)
+        _uiRender = YogaUIRender(scope: self)
+    }
+    
+    public func intJSScope() {
+        if(!_jsScopeInited) {
+            _jsScopeInited = true;
+            MyBridge.createScope(_contextId)
+        }
+    }
+    
+    
+    public func getUIRender() -> UIRender {
+        return _uiRender;
     }
     
     public func getContextId() -> Int32 {
         return _contextId;
+    }
+    
+    public func getViewController() -> UIViewController {
+        return _view;
     }
 
     public func evaluateJavaScript(sourceCode: String, sourceURL: String, startLine: Int32) {

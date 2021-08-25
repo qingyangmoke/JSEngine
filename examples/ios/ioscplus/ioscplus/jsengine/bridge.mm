@@ -48,6 +48,7 @@
 + (void)createScope:(int) contextId {
     JSEngineNS::Engine::instance()->createScope(contextId);
 }
+
 + (void)evaluateJavaScript:(int) contextId widthSourceCode: (NSString *) sourceCode widthSourceURL: (NSString *) sourceURL widthStartLine: (int) startLine {
     JSEngineNS::EngineScope* scope = JSEngineNS::Engine::instance()->getScope(contextId);
     if(scope != NULL) {

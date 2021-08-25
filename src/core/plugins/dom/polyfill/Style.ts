@@ -40,10 +40,9 @@ export default class Style {
             deleteProperty(target: any, prop: string | symbol): boolean {
                 delete target[prop];
                 if (typeof prop !== 'symbol') {
-                    UICommand.sendCommand(UICommand.SET_STYLE, {
+                    UICommand.sendCommand(UICommand.REMOVE_STYLE, {
                         uniqueId,
-                        style: target,
-                        replace: 1,
+                        key: prop,
                     });
                 }
                 return true;
@@ -51,21 +50,23 @@ export default class Style {
             set(target: any, prop: string | symbol, value: any, receiver: any): boolean {
                 target[prop] = value;
                 if (typeof prop !== 'symbol') {
+                    const style = {};
+                    style[prop] = `${value}`;
                     UICommand.sendCommand(UICommand.SET_STYLE, {
                         uniqueId,
-                        style: {
-                            [prop]: value,
-                        },
+                        style,
                     });
                 }
                 return true;
             },
         });
+        let newStyle = {};
+        Object.keys(style).forEach((key) => {
+            newStyle[key] = `${style[key]}`;
+        });
         UICommand.sendCommand(UICommand.SET_STYLE, {
             uniqueId,
-            style: {
-                ...style,
-            },
+            style: newStyle,
             replace: 1,
         });
         this._style[PROXY_SYMBOL] = true;

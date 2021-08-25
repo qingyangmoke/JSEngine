@@ -10,6 +10,7 @@ import com.facebook.yoga.YogaEdge;
 import com.facebook.yoga.YogaFlexDirection;
 import com.facebook.yoga.YogaJustify;
 import com.facebook.yoga.YogaNode;
+import com.facebook.yoga.YogaOverflow;
 import com.facebook.yoga.YogaPositionType;
 import com.facebook.yoga.YogaWrap;
 import com.jnibridge.modules.dom.DisplayUnit;
@@ -200,16 +201,20 @@ public class YogaStyleHelper {
             yogaNode.setWrap(YogaWrap.WRAP);
         } else if(cssValue == "nowrap") {
             yogaNode.setWrap(YogaWrap.NO_WRAP);
-        } else if(cssValue == "initial") {
-            yogaNode.setWrap(YogaWrap.NO_WRAP);
+        } else if(cssValue == "wrap-reverse") {
+            yogaNode.setWrap(YogaWrap.WRAP_REVERSE);
         }
     }
 
     public static void setFlexDirection(YogaNode yogaNode, String cssValue) {
         if(cssValue == "row") {
             yogaNode.setFlexDirection(YogaFlexDirection.ROW);
+        } else if(cssValue == "row-reverse") {
+            yogaNode.setFlexDirection(YogaFlexDirection.ROW_REVERSE);
         } else if(cssValue == "column") {
             yogaNode.setFlexDirection(YogaFlexDirection.COLUMN);
+        } else if(cssValue == "column-reverse") {
+            yogaNode.setFlexDirection(YogaFlexDirection.COLUMN_REVERSE);
         }
     }
 
@@ -256,6 +261,7 @@ public class YogaStyleHelper {
             yogaNode.setMaxWidth(getDisplayUnit(cssValue));
         }
     }
+
     public static void resetStyle(YogaNode yogaNode) {
         yogaNode.reset();
         View view = (View)yogaNode.getData();
@@ -263,6 +269,22 @@ public class YogaStyleHelper {
             view.setBackgroundColor(Color.TRANSPARENT);
         }
     }
+
+    public static void setOverflow(YogaNode yogaNode, String cssValue) {
+        YogaOverflow overflow = YogaOverflow.VISIBLE;
+        switch (cssValue) {
+            case "hidden":
+                overflow = YogaOverflow.HIDDEN;
+                break;
+            case "scroll":
+                overflow = YogaOverflow.SCROLL;
+                break;
+            default:
+                break;
+        }
+        yogaNode.setOverflow(overflow);
+    }
+
 
     public static void setStyle(YogaNode yogaNode, String key, String value) {
         float percentUnit;
@@ -273,13 +295,13 @@ public class YogaStyleHelper {
             case "height":
                 setHeight(yogaNode, value);
                 break;
-            case "min-width":
+            case "minWidth":
                 setMinWidth(yogaNode, value);
                 break;
-            case "max-width":
+            case "maxWidth":
                 setMaxWidth(yogaNode, value);
                 break;
-            case "min-height":
+            case "minHeight":
                 percentUnit = getPercentUnit(value);
                 if(percentUnit != -1) {
                     yogaNode.setMinHeightPercent(percentUnit);
@@ -287,7 +309,7 @@ public class YogaStyleHelper {
                     yogaNode.setMinHeight(getDisplayUnit(value));
                 }
                 break;
-            case "max-height":
+            case "maxHeight":
                 percentUnit = getPercentUnit(value);
                 if(percentUnit != -1) {
                     yogaNode.setMaxHeightPercent(percentUnit);
@@ -301,16 +323,19 @@ public class YogaStyleHelper {
             case "display":
                 yogaNode.setDisplay(value == "none" ? YogaDisplay.NONE : YogaDisplay.FLEX);
                 break;
-            case "justify-content":
+            case "justifyContent":
                 yogaNode.setJustifyContent(YogaStyleHelper.parseYogaJustify(value));
                 break;
-            case "align-items":
+            case "alignItems":
                 yogaNode.setAlignItems(YogaStyleHelper.parseYogaAlign(value));
                 break;
-            case "align-self":
+            case "alignContent":
+                yogaNode.setAlignContent(YogaStyleHelper.parseYogaAlign(value));
+                break;
+            case "alignSelf":
                 yogaNode.setAlignSelf(YogaStyleHelper.parseYogaAlign(value));
                 break;
-            case "flex-basis":
+            case "flexBasis":
                 if(value == "auto") {
                     yogaNode.setFlexBasisAuto();
                 } else if(value == "initial") {
@@ -321,7 +346,7 @@ public class YogaStyleHelper {
                     yogaNode.setFlexBasis(getDisplayUnit(value));
                 }
                 break;
-            case "flex-grow":
+            case "flexGrow":
                 if(value == "auto" || value == "initial") {
                     yogaNode.setFlexGrow(0);
                 } else if(value == "inherit") {
@@ -330,16 +355,16 @@ public class YogaStyleHelper {
                     yogaNode.setFlexGrow(getDisplayUnit(value));
                 }
                 break;
-            case "flex-direction":
+            case "flexDirection":
                 setFlexDirection(yogaNode, value);
                 break;
-            case "flex-wrap":
+            case "flexWrap":
                 setFlexWrap(yogaNode, value);
                 break;
-            case "flex-shrink":
+            case "flexShrink":
                 setFlexShrink(yogaNode, value);
                 break;
-            case "flex-flow":
+            case "flexFlow":
                 String [] flow = value.split(" ");
                 if(flow.length > 0) {
                     setFlexDirection(yogaNode, flow[0]);
@@ -351,16 +376,16 @@ public class YogaStyleHelper {
             case "position":
                 yogaNode.setPositionType(YogaStyleHelper.parseYogaPositionType(value));
                 break;
-            case "margin-left":
+            case "marginLeft":
                 setMargin(yogaNode, YogaEdge.LEFT, value);
                 break;
-            case "margin-right":
+            case "marginRight":
                 setMargin(yogaNode, YogaEdge.RIGHT, value);
                 break;
-            case "margin-top":
+            case "marginTop":
                 setMargin(yogaNode, YogaEdge.TOP, value);
                 break;
-            case "margin-bottom":
+            case "marginBottom":
                 setMargin(yogaNode, YogaEdge.BOTTOM, value);
                 break;
             case "margin":
@@ -388,16 +413,16 @@ public class YogaStyleHelper {
                     setMargin(yogaNode,YogaEdge.LEFT, marginAll[0]);
                 }
                 break;
-            case "padding-left":
+            case "paddingLeft":
                 setPadding(yogaNode, YogaEdge.LEFT, value);
                 break;
-            case "padding-right":
+            case "paddingRight":
                 setPadding(yogaNode,YogaEdge.RIGHT, value);
                 break;
-            case "padding-top":
+            case "paddingTop":
                 setPadding(yogaNode,YogaEdge.TOP, value);
                 break;
-            case "padding-bottom":
+            case "paddingBottom":
                 setPadding(yogaNode,YogaEdge.BOTTOM, value);
                 break;
             case "padding":
@@ -416,21 +441,23 @@ public class YogaStyleHelper {
                 } else if(paddingAll.length == 2) {
                     setPadding(yogaNode, YogaEdge.TOP, paddingAll[0]);
                     setPadding(yogaNode, YogaEdge.RIGHT, paddingAll[1]);
-                    setPadding(yogaNode, YogaEdge.BOTTOM, paddingAll[1]);
-                    setPadding(yogaNode, YogaEdge.LEFT, paddingAll[0]);
-                } else if(paddingAll.length == 1) {
-                    setPadding(yogaNode, YogaEdge.TOP, paddingAll[0]);
-                    setPadding(yogaNode, YogaEdge.RIGHT, paddingAll[0]);
                     setPadding(yogaNode, YogaEdge.BOTTOM, paddingAll[0]);
-                    setPadding(yogaNode, YogaEdge.LEFT, paddingAll[0]);
+                    setPadding(yogaNode, YogaEdge.LEFT, paddingAll[1]);
+                } else if(paddingAll.length == 1) {
+                    setPadding(yogaNode, YogaEdge.ALL, paddingAll[0]);
                 }
                 break;
-            case "background-color":
             case "backgroundColor":
                 View view = (View)yogaNode.getData();
                 if(view != null) {
                     view.setBackgroundColor(Color.parseColor(value));
                 }
+                break;
+            case "aspectRatio":
+                yogaNode.setAspectRatio(Float.parseFloat(value));
+                break;
+            case "overflow":
+                setOverflow(yogaNode, value);
                 break;
         }
     }

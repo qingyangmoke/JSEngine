@@ -12,8 +12,8 @@ public class NativeModuleManager {
     private var _scope: JSEngineScope;
     public init(scope: JSEngineScope) {
         _scope = scope;
-        let jsTimerModule = JSTimerModule(scope: scope);
-        registerModule(module: jsTimerModule);
+        registerModule(module: JSTimerModule(scope: scope))
+        registerModule(module: UIModule(scope: scope))
     }
     
     public func getScope() -> JSEngineScope {

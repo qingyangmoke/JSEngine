@@ -7,6 +7,12 @@
 - cmake >= 3.11-3.18
 - c++17
 
+## pod install
+``` js
+cd examples/ios/ioscplus
+pod install
+```
+
 ## 生成make文件
 ```shell
   # dom polyfil
